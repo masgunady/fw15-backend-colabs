@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const authMiddleware = require("../middlewares/auth.middleware")
+// const authMiddleware = require("../middlewares/auth.middlewares")
 
 router.get("/", (request, response) => {
     return response.json({
@@ -9,10 +9,16 @@ router.get("/", (request, response) => {
 })
 
 router.use("/auth", require("./auth.router"))
-router.use("/admin", authMiddleware, require("./admin/admin.router"))
-router.use("/profile", authMiddleware, require("./profile.router"))
-router.use("/edit-profile", require("./editProfile.router"))
-router.use("/saved-article", require("./editProfile.router"))
+// router.use("/admin", authMiddleware, require("./admin/admin.router"))
+// router.use("/profile", authMiddleware, require("./profile.router"))
+// router.use("/edit-profile", require("./editProfile.router"))
+// router.use("/saved-article", require("./savedProfile.router"))
+
+// router.use("/article", require("./article.router"))
+
+
+
+
 
 
 router.use("*", (request, response) => {
