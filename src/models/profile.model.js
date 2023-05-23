@@ -1,6 +1,6 @@
 const db = require("../helpers/db.helper")
 
-const table = "profile"
+const table = "profiles"
 
 exports.findAll = async function(page, limit, search, sort, sortBy){
     page = parseInt(page) || 1
@@ -71,7 +71,7 @@ exports.insert = async function(data){
     const query = `
     INSERT INTO "${table}" 
     ("picture", "fullName", "phoneNumber", "job", "about", "userId") 
-    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
     `  
     const values = [data.picture, data.fullName, data.phoneNumber, data.job, data.about, data.userId]   
     const {rows} = await db.query(query, values)
