@@ -1,7 +1,7 @@
 const userModel = require("../models/user.model")
 const profileModel = require("../models/profile.model")
 const forgotRequest = require("../models/forgotRequest.model")
-// const erorrHandler = require("../helpers/errorHandler.helper")
+const erorrHandler = require("../helpers/errorHandler.helper")
 const jwt = require("jsonwebtoken")
 const {APP_SECRET} = process.env
 const argon = require("argon2")
@@ -24,25 +24,26 @@ exports.login = async (request, response) => {
             results: {token} 
         })
     }catch(err){
-        // return erorrHandler(response, err)
-        return console.log(err)
+        return erorrHandler(response, err)
     }
 }
 
 exports.register = async(request, response) => {
     try{
-        const {fullName, password, confirmPassword} = request.body
-        if(password !== confirmPassword){
-            throw Error("password_unmatch")
-        }
+        const {phoneNumber, password} = request.body
+        // if(password !== confirmPassword){
+        //     throw Error("password_unmatch")
+        // }
         const hash = await argon.hash(password)
+        const roleStatus = 1
         const data = {
             ...request.body,
-            password: hash
+            password: hash,
+            roleId: roleStatus
         }
         const user = await userModel.insert(data)
         const profileData = {
-            fullName,
+            phoneNumber,
             userId: user.id
         }
         await profileModel.insert(profileData)
@@ -53,8 +54,7 @@ exports.register = async(request, response) => {
             results: {token} 
         })
     }catch(err){
-        // return erorrHandler(response, err)
-        return console.log(err)
+        return erorrHandler(response, err)
     }
 }
 
@@ -81,8 +81,7 @@ exports.forgotPassword = async (request, response) => {
             message: "Request Reset password success!"
         })
     }catch(err){
-        // return erorrHandler(response, err)
-        return console.log(err)
+        return erorrHandler(response, err)
     }
 }
 
@@ -106,7 +105,6 @@ exports.resetPassword = async (request, response) => {
             message: "Reset Password success!"
         })
     }catch(err){
-        // return erorrHandler(response, err)
-        return console.log(err)
+        return erorrHandler(response, err)
     }
 }
