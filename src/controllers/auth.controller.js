@@ -1,7 +1,7 @@
-const userModel = require("../models/users.model")
-const profileModel = require("../models/profiles.model")
+const userModel = require("../models/user.model")
+const profileModel = require("../models/profile.model")
 const forgotRequest = require("../models/forgotRequest.model")
-const erorrHandler = require("../helpers/errorHandler.helper")
+// const erorrHandler = require("../helpers/errorHandler.helper")
 const jwt = require("jsonwebtoken")
 const {APP_SECRET} = process.env
 const argon = require("argon2")
@@ -24,7 +24,8 @@ exports.login = async (request, response) => {
             results: {token} 
         })
     }catch(err){
-        return erorrHandler(response, err)
+        // return erorrHandler(response, err)
+        return console.log(err)
     }
 }
 
@@ -52,7 +53,8 @@ exports.register = async(request, response) => {
             results: {token} 
         })
     }catch(err){
-        return erorrHandler(response, err)
+        // return erorrHandler(response, err)
+        return console.log(err)
     }
 }
 
@@ -79,7 +81,8 @@ exports.forgotPassword = async (request, response) => {
             message: "Request Reset password success!"
         })
     }catch(err){
-        return erorrHandler(response, err)
+        // return erorrHandler(response, err)
+        return console.log(err)
     }
 }
 
@@ -103,6 +106,7 @@ exports.resetPassword = async (request, response) => {
             message: "Reset Password success!"
         })
     }catch(err){
-        return erorrHandler(response, err)
+        // return erorrHandler(response, err)
+        return console.log(err)
     }
 }
