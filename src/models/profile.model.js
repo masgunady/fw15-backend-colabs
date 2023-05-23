@@ -36,7 +36,6 @@ exports.findOneByUserId = async function(userId){
     SELECT
     "u"."id",
     "p"."picture",
-    "p"."backgroundPicture",
     "p"."fullName",
     "u"."username",
     "u"."email",
@@ -71,10 +70,10 @@ exports.findOneByEmail = async function(email){
 exports.insert = async function(data){
     const query = `
     INSERT INTO "${table}" 
-    ("picture", "backgroundPicture", "fullName", "phoneNumber", "job", "about", "userId") 
+    ("picture", "fullName", "phoneNumber", "job", "about", "userId") 
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *
     `  
-    const values = [data.picture, data.backgroundPicture, data.fullName, data.phoneNumber, data.job, data.about, data.userId]   
+    const values = [data.picture, data.fullName, data.phoneNumber, data.job, data.about, data.userId]   
     const {rows} = await db.query(query, values)
     return rows[0]
 }
@@ -84,17 +83,16 @@ exports.update = async function(id, data){
     UPDATE "${table}" 
     SET 
     "picture"=COALESCE(NULLIF($2, ''), "picture"), 
-    "backgroundPicture"=COALESCE(NULLIF($3, ''), "backgroundPicture"), 
-    "fullName"=COALESCE(NULLIF($4, ''), "fullName"), 
-    "phoneNumber"=COALESCE(NULLIF($5, ''), "phoneNumber"),
-    "job"=COALESCE(NULLIF($6, ''), "job"), 
-    "about"=COALESCE(NULLIF($7, ''), "about"), 
-    "userId"=COALESCE(NULLIF($8::INTEGER, NULL), "userId")
+    "fullName"=COALESCE(NULLIF($3, ''), "fullName"), 
+    "phoneNumber"=COALESCE(NULLIF($4, ''), "phoneNumber"),
+    "job"=COALESCE(NULLIF($5, ''), "job"), 
+    "about"=COALESCE(NULLIF($6, ''), "about"), 
+    "userId"=COALESCE(NULLIF($7::INTEGER, NULL), "userId")
     
     WHERE "id"=$1
     RETURNING *
     `
-    const values = [id, data.picture, data.backgroundPicture, data.fullName, data.phoneNumber, data.job, data.about, data.userId]   
+    const values = [id, data.picture, data.fullName, data.phoneNumber, data.job, data.about, data.userId]   
     const {rows} = await db.query(query, values)
     return rows[0]
 }
@@ -103,17 +101,16 @@ exports.updateByUserId = async function(userId, data){
     UPDATE "${table}" 
     SET 
     "picture"=COALESCE(NULLIF($2, ''), "picture"), 
-    "backgroundPicture"=COALESCE(NULLIF($3, ''), "backgroundPicture"), 
-    "fullName"=COALESCE(NULLIF($4, ''), "fullName"), 
-    "phoneNumber"=COALESCE(NULLIF($5, ''), "phoneNumber"),
-    "job"=COALESCE(NULLIF($6, ''), "job"), 
-    "about"=COALESCE(NULLIF($7, ''), "about") 
+    "fullName"=COALESCE(NULLIF($3, ''), "fullName"), 
+    "phoneNumber"=COALESCE(NULLIF($4, ''), "phoneNumber"),
+    "job"=COALESCE(NULLIF($5, ''), "job"), 
+    "about"=COALESCE(NULLIF($6, ''), "about") 
     
     
     WHERE "userId"=$1
     RETURNING *
     `
-    const values = [userId, data.picture, data.backgroundPicture, data.fullName, data.phoneNumber, data.job, data.about]   
+    const values = [userId, data.picture, data.fullName, data.phoneNumber, data.job, data.about]   
     const {rows} = await db.query(query, values)
     return rows[0]
 }

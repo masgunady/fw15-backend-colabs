@@ -15,6 +15,10 @@ router.use("/auth", require("./auth.router"))
 // router.use("/saved-article", require("./savedProfile.router"))
 
 // router.use("/article", require("./article.router"))
+// router.use("/category", require("./category.router"))
+// router.use("/notifications", require("./notifications.router"))
+// router.use("/write-article", require("./write-article.router"))
+
 
 
 
