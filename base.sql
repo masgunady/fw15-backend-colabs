@@ -40,3 +40,12 @@ CREATE TABLE "forgotRequest" (
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updateAt" TIMESTAMP DEFAULT NULL
 );
+
+CREATE TABLE "comments" (
+    "id"INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "name" VARCHAR (255),
+    "email" VARCHAR (255) UNIQUE,
+    "articleId" INTEGER,
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updateAt" TIMESTAMP DEFAULT NULL
+);
