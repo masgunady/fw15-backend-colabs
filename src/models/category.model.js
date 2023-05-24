@@ -27,13 +27,28 @@ SELECT  * FROM "categories" WHERE id=$1
     return rows[0]
 }
 
+exports.findOneByUserId = async function(userId){
+    const query = `
+SELECT 
+"u"."id" AS "userId",
+"c"."name",
+"c".picture"
+FROM "categories" "c"
+JOIN 'users" "u" ON "u"."id" = "c"."userId" 
+WHERE "c"."userid" =$1
+`
+    const values = [userId]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
+
 
 exports.insert = async function(data){
     const query = `
-INSERT INTO "categories" ("name") 
-VALUES ($1) RETURNING *
+INSERT INTO "categories" ("name", "picture") 
+VALUES ($1, $2) RETURNING *
 `
-    const values = [data.name]
+    const values = [data.name, data.picture]
     const {rows} = await db.query(query, values)
     return rows [0]
 }
@@ -41,11 +56,13 @@ VALUES ($1) RETURNING *
 exports.update = async function (id, data){
     const query = `
     UPDATE "categories"
-    SET "name" =$2
+    SET 
+    "name" =$2,
+    "picture" =$3
     WHERE "id" =$1
     RETURNING *`
 
-    const values = [id, data.name]
+    const values = [id, data.name, data.picture]
     const {rows} = await db.query(query, values)
     return rows [0]
 }

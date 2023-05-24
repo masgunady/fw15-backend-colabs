@@ -1,28 +1,29 @@
 const errorHandler = require("../helpers/errorHandler.helper")
 const caterogyModels = require("../models/category.model")
+const fileRemover = require("../helpers/fileRemover.helper")
 
 
 exports.getAllCategories = async (req, res) => {
     console.log(req.query)
-    try { 
+    try {
         const sortWhaitlist = ["name"]
-        if(req.query.sort && !sortWhaitlist.includes(req.query.sort)){
+        if (req.query.sort && !sortWhaitlist.includes(req.query.sort)) {
             return res.status(400).json({
                 success: false,
-                message:`Please choose one of the following sorting options: ${sortWhaitlist.join(",")}`
+                message: `Please choose one of the following sorting options: ${sortWhaitlist.join(",")}`
             })
         }
 
         const sortByWhaitlist = ["asc", "desc"]
-        if(req.query.sortBy && !sortByWhaitlist.includes(req.query.sortBy.toLowerCase())){
+        if (req.query.sortBy && !sortByWhaitlist.includes(req.query.sortBy.toLowerCase())) {
             return res.status(400).json({
                 success: false,
-                message:`Please choose one of the following sorting options:  ${sortByWhaitlist.join(",")}`
+                message: `Please choose one of the following sorting options:  ${sortByWhaitlist.join(",")}`
             })
         }
 
-        const data = await caterogyModels.findAllCategories(req.query.page, 
-            req.query.limit, 
+        const data = await caterogyModels.findAllCategories(req.query.page,
+            req.query.limit,
             req.query.search,
             req.query.sort,
             req.query.sortBy)
@@ -31,26 +32,26 @@ exports.getAllCategories = async (req, res) => {
             message: "List off all categories",
             results: data
         })
-  
-    } 
+
+    }
     catch (error) {
         console.log(error)
         return errorHandler(res, error)
-  
+
     }
 }
 
-exports.getOneCategories = async (req, res)=>{
+exports.getOneCategories = async (req, res) => {
     try {
-        if(isNaN(req.params.id) && parseInt(req.params.id) !== req.params.id){
+        if (isNaN(req.params.id) && parseInt(req.params.id) !== req.params.id) {
             return res.status(400).json({
-                success:false,
+                success: false,
                 message: "Parameter id must be number!"
             })
         }
         const data = await caterogyModels.findOne(req.params.id)
         console.log(data)
-        if(data){
+        if (data) {
             console.log(data)
             return res.json({
                 success: true,
@@ -58,7 +59,7 @@ exports.getOneCategories = async (req, res)=>{
                 results: data
             })
         }
-        else{
+        else {
             console.log(data)
             return res.status(404).json({
                 success: false,
@@ -66,82 +67,110 @@ exports.getOneCategories = async (req, res)=>{
                 results: data
             })
         }
-  
+
     } catch (error) {
         console.log(error)
         return errorHandler(res, error)
-  
+
     }
 }
 
-exports.createCategories = async (req, res) =>{
-    try{
-        if(!req?.body?.name){
+exports.createCategories = async (req, res) => {
+    try {
+        if (
+            !req.file ||
+            !req.body.name) {
             return res.status(404).json({
-                succes:false,
-                message:"Data cannot be empty!",
-                results:""
+                succes: false,
+                message: "Data cannot be empty!",
+                results: ""
             })
         }
-    
-        const categories = await caterogyModels.insert(req.body)
+        // const { id } = req.user
+        // console.log(id)
+        // const user = await caterogyModels.findOneByUserId(id)
+        
+        const data = {
+            ...req.body
+        }
+        if(req.file){
+            // if (user.picture) {
+            //     fileRemover({ filename: user.picture })
+            // }
+            data.picture = req.file.path
+        }
+        const categories = await caterogyModels.insert(data)
+        console.log(data)
         return res.json({
-            succes:true,
-            message:"Create categories Succesfully",
+            success: true,
+            message: "Create categories success",
             results: categories
         })
-    }catch(err){
+    } catch (err) {
         return errorHandler(res, err)
     }
 }
 
 
-exports.updateCategories = async (req,res) =>{
-    try{
-        if(!req.params.id || isNaN(req.params.id)){
+exports.updateCategories = async (req, res) => {
+    try {
+        if (!req.params.id || isNaN(req.params.id)) {
             return res.status(404).json({
-                succes:false,
-                message:"Id cannot be empty!",
-                results:""
-            })    
+                succes: false,
+                message: "Id cannot be empty!",
+                results: ""
+            })
         }
-        const resultsUpdate = await caterogyModels.update(req.params.id, req.body)
-        if(resultsUpdate){
+        const id = req.params.id
+        console.log(id)
+        const user = await caterogyModels.findOne(id)
+        
+        const data = {
+            ...req.body
+        }
+        if(req.file){
+            if(user.picture){
+                fileRemover({filename: user.picture})
+            }
+            data.picture = req.file.path
+        }
+        const resultsUpdate = await caterogyModels.update(req.params.id, data)
+        if (resultsUpdate) {
             return res.json({
-                succes:true,
-                message:"Update Categories Succesfully",
-                results:resultsUpdate
+                succes: true,
+                message: "Update Categories Succesfully",
+                results: resultsUpdate
             })
-        }else{
+        } else {
             return res.status(404).json({
-                succes:false,
+                succes: false,
                 message: "Error: Data not found",
-                results:""
+                results: ""
             })
         }
-    }catch(err){
+    } catch (err) {
         return errorHandler(res, err)
     }
 }
 
 
-exports.deleteCategories = async (req, res)=>{
-    try{
+exports.deleteCategories = async (req, res) => {
+    try {
         const resultsCategories = await caterogyModels.findOne(req.params.id)
-        if(!resultsCategories){
+        if (!resultsCategories) {
             return res.status(404).json({
-                succes:false,
-                message:"Error: Data Categories not found",
-                results:""
+                succes: false,
+                message: "Error: Data Categories not found",
+                results: ""
             })
         }
         await caterogyModels.destroy(req.params.id)
         return res.json({
-            succes:true,
-            message:"Delete Categories Succesfully",
-            results:""
+            succes: true,
+            message: "Delete Categories Succesfully",
+            results: ""
         })
-    }catch(err){
+    } catch (err) {
         return errorHandler(res, err)
     }
 }
