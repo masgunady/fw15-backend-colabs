@@ -1,8 +1,10 @@
 {
 	"info": {
-		"_postman_id": "d9130c52-6415-47b4-88f1-8180b44e4dc3",
+		"_postman_id": "11890302-9984-41c0-bd37-48d63fd3fc0c",
 		"name": "LOGPOSE BACKEND",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26802409",
+		"_collection_link": "https://martian-meadow-622170.postman.co/workspace/Team-Workspace~beb8ef16-2ff9-40cb-8687-e097e78932a6/collection/26802409-11890302-9984-41c0-bd37-48d63fd3fc0c?action=share&creator=26802409&source=collection_link"
 	},
 	"item": [
 		{
@@ -229,6 +231,259 @@
 							],
 							"path": [
 								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CATEGORIES",
+			"item": [
+				{
+					"name": "GET ALL CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/categories",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE CATEGORIES",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Politic",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/categories",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET DETAILS CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/categories/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CATEGORIES",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/categories/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CATEGORIES",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/categories/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TAGS",
+			"item": [
+				{
+					"name": "CREATE TAGS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "#ladygaga",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/tags",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL TAGS",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GET DETAILS TAGS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tags/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE TAGS",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/tags/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE TAGS",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tags/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
 							]
 						}
 					},
