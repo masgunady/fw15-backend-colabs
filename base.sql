@@ -33,19 +33,20 @@ CREATE TABLE "tags" (
     "updatedAt" TIMESTAMP DEFAULT NULL
 );
 
-CREATE TABLE "forgotRequest" (
-    "id"INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    "email" VARCHAR (255),
-    "code" VARCHAR (255),
-    "createdAt" TIMESTAMP DEFAULT NOW(),
-    "updateAt" TIMESTAMP DEFAULT NULL
-);
 
 CREATE TABLE "comments" (
     "id"INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "name" VARCHAR (255),
     "email" VARCHAR (255) UNIQUE,
     "articleId" INTEGER,
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updateAt" TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE "forgotRequest" (
+    "id"INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "email" VARCHAR (255),
+    "code" VARCHAR (255),
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updateAt" TIMESTAMP DEFAULT NULL
 );
