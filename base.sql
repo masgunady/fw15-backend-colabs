@@ -18,3 +18,25 @@ CREATE TABLE "profiles" (
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updatedAt" TIMESTAMP DEFAULT NULL
 );
+
+CREATE TABLE "categories" (
+    "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "name" VARCHAR(255),
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE "tags" (
+    "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "name" VARCHAR(255),
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE "forgotRequest" (
+    "id"INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "email" VARCHAR (255),
+    "code" VARCHAR (255),
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updateAt" TIMESTAMP DEFAULT NULL
+);
