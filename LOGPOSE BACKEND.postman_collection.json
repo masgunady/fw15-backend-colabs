@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bebcf63a-207a-45a1-aff0-2a84130394eb",
+		"_postman_id": "d9130c52-6415-47b4-88f1-8180b44e4dc3",
 		"name": "LOGPOSE BACKEND",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -18,12 +18,12 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "cici@mail.com",
+									"value": "haaland_baru@mail.com",
 									"type": "default"
 								},
 								{
 									"key": "password",
-									"value": "P@ssw0rd321",
+									"value": "123!@#ABC",
 									"type": "default"
 								}
 							]
@@ -51,17 +51,17 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "cici@mail.com",
+									"value": "alpacino@mail.com",
 									"type": "default"
 								},
 								{
 									"key": "password",
-									"value": "P@ssw0rd123",
+									"value": "123!@#Abc",
 									"type": "default"
 								},
 								{
 									"key": "phoneNumber",
-									"value": "08912345678",
+									"value": "088888888",
 									"type": "default"
 								}
 							]
@@ -145,6 +145,90 @@
 							"path": [
 								"auth",
 								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PROFILES",
+			"item": [
+				{
+					"name": "GET PROFILE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDIT PROFILE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/erling-haaland-man-city-seharusnya-bisa-bikin-mu-lebih-menderita.jpg",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "@mas_haaland",
+									"type": "default",
+									"disabled": true
+								},
+								{
+									"key": "fullName",
+									"value": "Haaland Firmansyah",
+									"type": "default",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "mas_haaland@mail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "123!@#ABC",
+									"type": "default"
+								},
+								{
+									"key": "job",
+									"value": "Cetak Skor & Pecahin Rekor",
+									"type": "default",
+									"disabled": true
+								},
+								{
+									"key": "about",
+									"value": "Mantan kepala suku Viking Norwegia",
+									"type": "default",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile"
 							]
 						}
 					},
