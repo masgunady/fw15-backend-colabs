@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const errorHandler = require("../helpers/erorHandler.helper")
+const errorHandler = require("../helpers/errorHandler.helper")
 const {APP_SECRET} = process.env
 
 
