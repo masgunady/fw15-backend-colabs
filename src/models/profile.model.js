@@ -36,8 +36,8 @@ exports.findOneByUserId = async function(userId){
     SELECT
     "u"."id",
     "p"."picture",
-    "p"."fullName",
-    "u"."username",
+    "p"."fullName" as "name",
+    "p"."username",
     "u"."email",
     "p"."phoneNumber",
     "p"."job",
@@ -102,15 +102,16 @@ exports.updateByUserId = async function(userId, data){
     SET 
     "picture"=COALESCE(NULLIF($2, ''), "picture"), 
     "fullName"=COALESCE(NULLIF($3, ''), "fullName"), 
-    "phoneNumber"=COALESCE(NULLIF($4, ''), "phoneNumber"),
-    "job"=COALESCE(NULLIF($5, ''), "job"), 
-    "about"=COALESCE(NULLIF($6, ''), "about") 
+    "username"=COALESCE(NULLIF($4, ''), "username"), 
+    "phoneNumber"=COALESCE(NULLIF($5, ''), "phoneNumber"),
+    "job"=COALESCE(NULLIF($6, ''), "job"), 
+    "about"=COALESCE(NULLIF($7, ''), "about") 
     
     
     WHERE "userId"=$1
     RETURNING *
     `
-    const values = [userId, data.picture, data.fullName, data.phoneNumber, data.job, data.about]   
+    const values = [userId, data.picture, data.fullName, data.username, data.phoneNumber, data.job, data.about]   
     const {rows} = await db.query(query, values)
     return rows[0]
 }
