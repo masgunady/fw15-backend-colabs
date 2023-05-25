@@ -1,10 +1,8 @@
 {
 	"info": {
-		"_postman_id": "11890302-9984-41c0-bd37-48d63fd3fc0c",
+		"_postman_id": "d81c03cc-a810-4e75-a7cc-64be3dda2b55",
 		"name": "LOGPOSE BACKEND",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26802409",
-		"_collection_link": "https://martian-meadow-622170.postman.co/workspace/Team-Workspace~beb8ef16-2ff9-40cb-8687-e097e78932a6/collection/26802409-11890302-9984-41c0-bd37-48d63fd3fc0c?action=share&creator=26802409&source=collection_link"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -20,12 +18,12 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "haaland_baru@mail.com",
+									"value": "mas_haaland@mail.com",
 									"type": "default"
 								},
 								{
 									"key": "password",
-									"value": "123!@#ABC",
+									"value": "123!@#Abc",
 									"type": "default"
 								}
 							]
@@ -119,7 +117,7 @@
 							"urlencoded": [
 								{
 									"key": "code",
-									"value": "470700",
+									"value": "882700",
 									"type": "default"
 								},
 								{
@@ -129,12 +127,12 @@
 								},
 								{
 									"key": "password",
-									"value": "P@ssw0rd321",
+									"value": "P@ssw0rd123",
 									"type": "default"
 								},
 								{
 									"key": "confirmPassword",
-									"value": "P@ssw0rd321",
+									"value": "P@ssw0rd123",
 									"type": "default"
 								}
 							]
@@ -403,7 +401,10 @@
 					"name": "GET ALL TAGS",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				},
@@ -484,6 +485,294 @@
 									"key": "id",
 									"value": null
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LIKES",
+			"item": [
+				{
+					"name": "CREATE LIKE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "articleId",
+									"value": "2",
+									"type": "default"
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/likes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"likes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE LIKE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/likes/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"likes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "WRITE ARTICLES",
+			"item": [
+				{
+					"name": "MANAGE WRITE ARTICLES",
+					"item": [
+						{
+							"name": "ALL MANAGE ARTICLES",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/article/manage",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"article",
+										"manage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DETAIL MANAGE ARTICLES",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/article/manage/:id",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"article",
+										"manage",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE MANAGE ARTICLES",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "picture",
+											"type": "file",
+											"src": "/C:/Users/DELL/Downloads/EventsImg/Banner9.jpg"
+										},
+										{
+											"key": "title",
+											"value": "The Most Famous Van Gogh Paintings Everyone Should Know",
+											"type": "default"
+										},
+										{
+											"key": "content",
+											"value": "\nVincent Van Gogh‘s paintings are adored around the world. His unique post-impressionist technique, with swathing brushstrokes and striking colors, is instantly recognizable.\n\nWhile alive, the artist’s work was not so well received and he sold very few of his paintings. He became posthumously celebrated and now he is one of the most famous painters ever to have lived, with his original artworks selling for millions. Some of Van Gogh’s most expensive paintings include the Portrait de l’artiste sans barbe (1889) which sold for $71.5 million in 1998 and Portrait du Docteur Gachet (1890) which sold for $82.5 million in 1990. While many original Van Gogh paintings are scattered around the world’s greatest museums and private collections, many of them now sit in the Van Gogh Museum in Amsterdam.",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/article/manage",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"article",
+										"manage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE MANAGE ARTICLES",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "picture",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "title",
+											"value": "",
+											"type": "default"
+										},
+										{
+											"key": "content",
+											"value": "",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/article/manage/:id",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"article",
+										"manage",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE MANAGE ARTICLES",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/article/manage/:id",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"article",
+										"manage",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DETAIL ARTICLES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/article/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"article",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL ARTICLES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/article",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"article"
+							],
+							"query": [
+								{
+									"key": "searchName",
+									"value": "Jakarta",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL ARTICLES WITH CATEGORY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/article/tags",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"article",
+								"tags"
 							]
 						}
 					},
