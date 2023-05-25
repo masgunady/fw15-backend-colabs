@@ -1,58 +1,57 @@
 const db = require("../helpers/db.helper")
-const table = "article"
+const table = "articles"
 
 exports.findAll = async function (params) {
     params.page = parseInt(params.page) || 1
-    params.limit = parseInt(params.limit) || 7
+    params.limit = parseInt(params.limit) || 5
     params.searchName = params.searchName || ""
     params.searchCategory = params.searchCategory || ""
     params.searchLocation = params.searchLocation || ""
-    params.sort = params.sort || "id"
-    params.sortBy = params.sortBy || ""
+    params.sort = params.sort || "ASC"
+    params.sortBy = params.sortBy || "id"
 
     const offset = (params.page - 1) * params.limit
+    
+    const countQuery = `
+    SELECT COUNT(*)::INTEGER
+    FROM "${table}"
+    WHERE "title" LIKE $1 
+    `
+    const countValues = [`%${params.searchName}%` ]
+    console.log(countValues)
+    const {rows: countRows} = await db.query(countQuery, countValues)
 
     const query = `
-    SELECT 
-    "e"."id", 
-    "e"."picture", 
-    "e"."title", 
-    "e"."date", 
-    "c"."name" as "category",
-    "ci"."name" as "location" 
-    FROM "eventCategories" "ec"
-    JOIN "article" "e" ON "e"."id" = "ec"."eventId"
-    JOIN "categories" "c" ON "c"."id" = "ec"."categoryId"
-    JOIN "cities" "ci" ON "ci"."id" = "e"."cityId"
-    WHERE "e"."title" LIKE $3 AND "c"."name" LIKE $4 AND "ci"."name" LIKE $5
-    ORDER BY "${params.sort}" ${params.sortBy}
-    LIMIT $1 OFFSET $2
+    SELECT "picture", "id", "title", left("content", 100), "createdBy", "createdAt", "updatedAt" 
+    FROM "${table}"
+    WHERE "title" LIKE $1 
+    ORDER BY "${params.sortBy}" ${params.sort}
+    LIMIT ${params.limit} OFFSET ${offset}
     `
-    const values = [params.limit, offset, `%${params.searchName}%`, `%${params.searchCategory}%`, `%${params.searchLocation}%`]
+    console.log(query)
+    const values = [`%${params.searchName}%` ]
     const { rows } = await db.query(query, values)
-    return rows
+    return {rows, pageInfo: {
+        totaData: countRows[0].count,
+        page: params.page,
+        limit: params.limit,
+        totalPage: Math.ceil(countRows[0].count / params.limit)
+    }}
 }
 
-exports.findOneById = async function (id) {
+exports.findOne = async function (id) {
     const query = `
-    SELECT
-    "e"."id", 
-    "e"."picture", 
-    "e"."title", 
-    "e"."date", 
-    "c"."name" as "category",
-    "ci"."name" as "location", 
-    "e"."descriptions" 
-    FROM "eventCategories" "ec"
-    JOIN "article" "e" ON "e"."id" = "ec"."eventId"
-    JOIN "categories" "c" ON "c"."id" = "ec"."categoryId"
-    JOIN "cities" "ci" ON "ci"."id" = "e"."cityId"
-    WHERE "e"."id" = $1
+  SELECT "picture", "id", "title", left("content", 100), "createdBy", "createdAt", "updatedAt" 
+  FROM "${table}"
+  WHERE "id" = $1
   `
+    console.log(query)
     const values = [id]
     const { rows } = await db.query(query, values)
-    return rows[0]
+    return {rows}
 }
+
+
 
 //manage event
 exports.findDetailManageArticle = async function (eventId, createdBy) {
@@ -78,10 +77,10 @@ exports.findAllManageArticle = async function (createdBy) {
 exports.createManageArticle = async function (data) {
     const query = `
     INSERT INTO "${table}"
-    ("picture", "title", "content")
+    ("picture", "title", "content", "createdBy")
     VALUES ($1, $2, $3, $4) RETURNING *
     `
-    const values = [data.picture, data.title, data.content]
+    const values = [data.picture, data.title, data.content, data.createdBy]
     const { rows } = await db.query(query, values)
     return rows[0]
 }

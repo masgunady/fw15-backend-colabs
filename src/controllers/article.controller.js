@@ -5,11 +5,12 @@ const erorrHandler = require("../helpers/errorHandler.helper")
 
 exports.getAllArticle = async (request, response) => {
     try {
-        const data = await articleModel.findAll(request.query)
+        const {rows: results, pageInfo} = await articleModel.findAll(request.query)
         return response.json({
             success: true,
             message: "List of all article",
-            results: data
+            pageInfo,
+            results
         })
     } catch (err) {
         return erorrHandler(response, err)
@@ -19,7 +20,7 @@ exports.getAllArticle = async (request, response) => {
 exports.getArticle = async (request, response) => {
     try {
         const id = request.params.id
-        const data = await articleModel.findOneById(id)
+        const data = await articleModel.findOne(id)
         return response.json({
             success: true,
             message: "List of article",
@@ -35,10 +36,10 @@ exports.getManageAllArticle = async (request, response) => {
     try {
         const { id } = request.user
         console.log(id)
-        const data = await articleModel.findAllManagearticle(id)
+        const data = await articleModel.findAllManageArticle(id)
         return response.json({
             success: true,
-            message: "List of all Manage article",
+            message: "List of all Manage Article",
             results: data
         })
     } catch (err) {
@@ -49,7 +50,7 @@ exports.getManageAllArticle = async (request, response) => {
 exports.getManageDetailArticle = async (request, response) => {
     try {
         const { id } = request.user
-        const data = await articleModel.findDetailManagearticle(request.params.id, id)
+        const data = await articleModel.findDetailManageArticle(request.params.id, id)
         return response.json({
             success: true,
             message: "List of Detail article",
@@ -62,21 +63,17 @@ exports.getManageDetailArticle = async (request, response) => {
 
 exports.createManageArticle = async (request, response) => {
     try {
-        const { id } = request.user
+        const {id} = request.user
         const data = {
             ...request.body,
             createdBy: id
-        }
-        const newData = {
-            ...data
         }
         if (request.file) {
             data.picture = request.file.filename
         }
         console.log(data.picture)
-    
-        const dataArticle = await articleModel.createManagearticle(newData)
-        if (!newData) {
+        const dataArticle = await articleModel.createManageArticle(data)
+        if (!data) {
             throw Error("failed_create_article")
         }
         return response.json({
@@ -85,7 +82,6 @@ exports.createManageArticle = async (request, response) => {
             results: dataArticle
         })
     } catch (err) {
-        fileremover(request.file)
         return erorrHandler(response, err)
     }
 }
@@ -99,7 +95,7 @@ exports.updateManageArticle = async (request, response) => {
         if (request.file) {
             data.picture = request.file.filename
         }
-        const article = await articleModel.updateManagearticle(request.params.id, data)
+        const article = await articleModel.updateManageArticle(request.params.id, data)
         if (article) {
             return response.json({
                 succes: true,
