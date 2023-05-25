@@ -22,9 +22,11 @@ CREATE TABLE "profiles" (
 CREATE TABLE "categories" (
     "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "name" VARCHAR(255),
+    "picture" VARCHAR(255),
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updatedAt" TIMESTAMP DEFAULT NULL
 );
+
 
 CREATE TABLE "tags" (
     "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -59,6 +61,8 @@ CREATE TABLE "articles" (
     "title" VARCHAR(255),
     "content" TEXT,
     "createdBy" INTEGER,
+    "categoryId" INTEGER,
+    "statusId"  INTEGER,
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updatedAt" TIMESTAMP DEFAULT NULL
 );

@@ -64,6 +64,7 @@ exports.findAll = async function (params) {
     const {rows: countRows} = await db.query(countQuery, countValues)
 
     const query = `
+
     SELECT "a"."picture", 
     "a"."id",
     "a"."title", 
@@ -75,6 +76,11 @@ exports.findAll = async function (params) {
     LEFT JOIN "likes" as "li" ON "li"."articleId" = "a"."id"
     WHERE "a"."title" LIKE $1 
     GROUP BY "a"."id"
+
+    SELECT "picture", "id", "title", left("content", 50), "createdBy", "createdAt", "updatedAt" 
+    FROM "${table}"
+    WHERE "title" LIKE $1 
+
     ORDER BY "${params.sortBy}" ${params.sort}
     LIMIT ${params.limit} OFFSET ${offset}
     `
@@ -127,10 +133,10 @@ exports.findAllManageArticle = async function (createdBy) {
 exports.createManageArticle = async function (data) {
     const query = `
     INSERT INTO "${table}"
-    ("picture", "title", "content", "createdBy")
-    VALUES ($1, $2, $3, $4) RETURNING *
+    ("picture", "title", "content", "createdBy", "categoryId", "statusId")
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
     `
-    const values = [data.picture, data.title, data.content, data.createdBy]
+    const values = [data.picture, data.title, data.content, data.createdBy, data.categoryId, data.statusId]
     const { rows } = await db.query(query, values)
     return rows[0]
 }

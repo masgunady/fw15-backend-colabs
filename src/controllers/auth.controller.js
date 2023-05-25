@@ -17,7 +17,7 @@ exports.login = async (request, response) => {
         if(!verify){
             throw Error("wrong_credentials")
         }
-        const token = jwt.sign({id: user.id}, APP_SECRET)
+        const token = jwt.sign({id: user.id, role:user.roleId}, APP_SECRET)
         return response.json({
             success: true,
             message: "Login Success!",
@@ -31,23 +31,22 @@ exports.login = async (request, response) => {
 exports.register = async(request, response) => {
     try{
         const {phoneNumber, password} = request.body
-        // if(password !== confirmPassword){
-        //     throw Error("password_unmatch")
-        // }
+
         const hash = await argon.hash(password)
-        const roleStatus = 1
+        const standardUser = 1
         const data = {
             ...request.body,
             password: hash,
-            roleId: roleStatus
+            roleId: standardUser,
         }
+        
         const user = await userModel.insert(data)
         const profileData = {
             phoneNumber,
             userId: user.id
         }
         await profileModel.insert(profileData)
-        const token = jwt.sign({id: user.id}, APP_SECRET)
+        const token = jwt.sign({id: user.id, role: user.roleId}, APP_SECRET)
         return response.json({
             success: true,
             message: "Register Success!",
