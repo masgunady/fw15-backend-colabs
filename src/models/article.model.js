@@ -77,10 +77,6 @@ exports.findAll = async function (params) {
     WHERE "a"."title" LIKE $1 
     GROUP BY "a"."id"
 
-    SELECT "picture", "id", "title", left("content", 50), "createdBy", "createdAt", "updatedAt" 
-    FROM "${table}"
-    WHERE "title" LIKE $1 
-
     ORDER BY "${params.sortBy}" ${params.sort}
     LIMIT ${params.limit} OFFSET ${offset}
     `
