@@ -1,36 +1,36 @@
 const multer = require("multer")
-// const cloudinary = require("cloudinary").v2
-// const { CloudinaryStorage } = require("multer-storage-cloudinary")
+const cloudinary = require("cloudinary").v2
+const { CloudinaryStorage } = require("multer-storage-cloudinary")
 
-// cloudinary.config({
-//     cloud_name: "dxs0yxeyr",
-//     api_key: "236157336681252",
-//     api_secret: "V2uHsegpJtBpFlUl3WSwkxdCL0I"
-// })
-
-// const storage = new CloudinaryStorage({
-//     cloudinary: cloudinary,
-//     params: {
-//         folder: "demo/fajarfath",
-//         format: async (req, file) => "png", // supports promises as well
-//         public_id: (req, file) => {
-//             const filename = new Date().getTime().toString()
-//             return filename
-//         },
-//     },
-// })
-
-const storage = multer.diskStorage({
-    destination: (request, file, cb) => {
-        cb(null, "uploads/")
-    },
-    filename: (request, file, cb) => {
-        const explode = file.originalname.split(".").length
-        const ext = file.originalname.split(".")[explode - 1]
-        const filename = new Date().getTime().toString() + "." + ext
-        cb(null, filename)
-    } 
+cloudinary.config({
+    cloud_name: "dxs0yxeyr",
+    api_key: "236157336681252",
+    api_secret: "V2uHsegpJtBpFlUl3WSwkxdCL0I"
 })
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "Team Collab/team2",
+        format: async (req, file) => "png", // supports promises as well
+        public_id: (req, file) => {
+            const filename = new Date().getTime().toString()
+            return filename
+        },
+    },
+})
+
+// const storage = multer.diskStorage({
+//     destination: (request, file, cb) => {
+//         cb(null, "uploads/")
+//     },
+//     filename: (request, file, cb) => {
+//         const explode = file.originalname.split(".").length
+//         const ext = file.originalname.split(".")[explode - 1]
+//         const filename = new Date().getTime().toString() + "." + ext
+//         cb(null, filename)
+//     } 
+// })
 
 const limits = {
     fileSize: 1*1024 *1024  //mjd 1 MBytes dari Bytes
