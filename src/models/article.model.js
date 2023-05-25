@@ -1,6 +1,48 @@
 const db = require("../helpers/db.helper")
 const table = "articles"
 
+// exports.findAll = async function (params) {
+//     params.page = parseInt(params.page) || 1
+//     params.limit = parseInt(params.limit) || 5
+//     params.searchName = params.searchName || ""
+//     params.searchCategory = params.searchCategory || ""
+//     params.searchLocation = params.searchLocation || ""
+//     params.sort = params.sort || "ASC"
+//     params.sortBy = params.sortBy || "id"
+
+//     const offset = (params.page - 1) * params.limit
+    
+//     const countQuery = `
+//     SELECT COUNT(*)::INTEGER
+//     FROM "${table}"
+//     WHERE "title" LIKE $1 
+//     `
+//     const countValues = [`%${params.searchName}%` ]
+//     console.log(countValues)
+//     const {rows: countRows} = await db.query(countQuery, countValues)
+
+//     const query = `
+//     SELECT "picture", "id", "title", left("content", 100), "createdBy", "createdAt", "updatedAt" 
+//     FROM "${table}"
+//     WHERE "title" LIKE $1 
+//     ORDER BY "${params.sortBy}" ${params.sort}
+//     LIMIT ${params.limit} OFFSET ${offset}
+//     `
+//     console.log(query)
+//     const values = [`%${params.searchName}%` ]
+//     const { rows } = await db.query(query, values)
+//     return {rows, pageInfo: {
+//         totaData: countRows[0].count,
+//         page: params.page,
+//         limit: params.limit,
+//         totalPage: Math.ceil(countRows[0].count / params.limit)
+//     }}
+// }
+
+//FINDALL DIBAWAH +FITUR NAMPILIN LIKES
+//KALO UDAH ADA TABEL LIKES TINGGAL DIGANTI
+//FINDALL YANG ATAS
+//SAMA INI
 exports.findAll = async function (params) {
     params.page = parseInt(params.page) || 1
     params.limit = parseInt(params.limit) || 5
@@ -22,9 +64,17 @@ exports.findAll = async function (params) {
     const {rows: countRows} = await db.query(countQuery, countValues)
 
     const query = `
-    SELECT "picture", "id", "title", left("content", 100), "createdBy", "createdAt", "updatedAt" 
-    FROM "${table}"
-    WHERE "title" LIKE $1 
+    SELECT "a"."picture", 
+    "a"."id",
+    "a"."title", 
+    left("a"."content", 100) as "content",
+    COUNT("li"."id")::INTEGER as "likeCount",
+    "a"."createdBy", "a"."createdAt", "a"."updatedAt" 
+
+    FROM "${table}" "a"
+    LEFT JOIN "likes" as "li" ON "li"."articleId" = "a"."id"
+    WHERE "a"."title" LIKE $1 
+    GROUP BY "a"."id"
     ORDER BY "${params.sortBy}" ${params.sort}
     LIMIT ${params.limit} OFFSET ${offset}
     `
