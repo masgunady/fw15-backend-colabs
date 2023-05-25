@@ -50,3 +50,9 @@ CREATE TABLE "forgotRequest" (
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updateAt" TIMESTAMP DEFAULT NULL
 );
+
+ALTER TABLE "comments" ADD COLUMN "userId" INTEGER;
+
+ALTER TABLE "comments" DROP COLUMN "email";
+
+ALTER TABLE "comments" ADD COLUMN "content" TEXT;

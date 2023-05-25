@@ -9,6 +9,9 @@ router.get("/", (request, response) => {
 })
 
 router.use("/auth", require("./auth.router"))
+router.use("/categories", require("./category.router"))
+router.use("/tags", require("./tags.router"))
+router.use("/comments", require("./comments.router"))
 // router.use("/admin", authMiddleware, require("./admin/admin.router"))
 router.use("/profile", authMiddleware, require("./profile.router"))
 // router.use("/edit-profile", require("./editProfile.router"))
@@ -17,7 +20,7 @@ router.use("/profile", authMiddleware, require("./profile.router"))
 
 // router.use("/saved-article", require("./savedProfile.router"))
 
-router.use("/article", require("./article.router"))
+// router.use("/articles", require("./article.router"))
 // router.use("/category", require("./category.router"))
 // router.use("/notifications", require("./notifications.router"))
 // router.use("/write-article", require("./write-article.router"))
