@@ -22,7 +22,7 @@ exports.findAll = async function (params) {
     const {rows: countRows} = await db.query(countQuery, countValues)
 
     const query = `
-    SELECT "picture", "id", "title", left("content", 100), "createdBy", "createdAt", "updatedAt" 
+    SELECT "picture", "id", "title", left("content", 50), "createdBy", "createdAt", "updatedAt" 
     FROM "${table}"
     WHERE "title" LIKE $1 
     ORDER BY "${params.sortBy}" ${params.sort}
