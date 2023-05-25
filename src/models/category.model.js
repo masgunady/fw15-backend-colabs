@@ -12,7 +12,7 @@ exports.findAllCategories = async function(page, limit, search, sort, sortBy){
 
     const query = `
   SELECT * FROM "categories" WHERE "name" LIKE $3 ORDER BY "${sort}" ${sortBy} LIMIT $1  OFFSET $2 
-  `
+    `
     const values = [limit, offset,`%${search}%`]
     const {rows} = await db.query(query, values)
     return rows

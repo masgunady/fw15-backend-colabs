@@ -1,4 +1,7 @@
 const articleModel = require("../models/article.model")
+const categoryModel = require("../models/category.model")
+const articleStatusModel = require("../models/statusArticle.model")
+const profileModel = require("../models/profile.model")
 const fileremover = require("../helpers/fileRemover.helper")
 const erorrHandler = require("../helpers/errorHandler.helper")
 
@@ -63,23 +66,60 @@ exports.getManageDetailArticle = async (request, response) => {
 
 exports.createManageArticle = async (request, response) => {
     try {
+
+        const {role} = request.user
+        
+        if(role !== 2 && role !== 3){
+            throw Error("please_sign_in")
+        }
+        const {categoryId} = request.body
+        const checkCategory = await categoryModel.findOne(categoryId)
+        if(!checkCategory){
+            throw Error("category_not_found")
+        }
+        
+        
         const {id} = request.user
         const data = {
             ...request.body,
-            createdBy: id
+            createdBy: id,
+            statusId:1
         }
         if (request.file) {
-            data.picture = request.file.filename
+            // data.picture = request.file.filename
+            data.picture = request.file.path
         }
-        console.log(data.picture)
         const dataArticle = await articleModel.createManageArticle(data)
-        if (!data) {
+        if (!dataArticle) {
             throw Error("failed_create_article")
         }
+
+
+        const status = await articleStatusModel.findOne(dataArticle.statusId)
+        const created = await profileModel.findOne(dataArticle.createdBy)
+        const category = await categoryModel.findOne(dataArticle.categoryId)
+        
+        // console.log(status.status, created.fullName, category.name)
+
+        const results = {
+            id:dataArticle.id,
+            picture:dataArticle.picture,
+            title: dataArticle.title,
+            content: dataArticle.content,
+            category: category.name,
+            createdBy: created.fullName,
+            status: status.status,
+            createdAt: dataArticle.createdAt,
+            updatedAt: dataArticle.updatedAt
+
+
+
+        }
+        
         return response.json({
             success: true,
             message: "Create article Successfully!",
-            results: dataArticle
+            results: results
         })
     } catch (err) {
         return erorrHandler(response, err)

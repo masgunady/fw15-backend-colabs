@@ -77,10 +77,10 @@ exports.findAllManageArticle = async function (createdBy) {
 exports.createManageArticle = async function (data) {
     const query = `
     INSERT INTO "${table}"
-    ("picture", "title", "content", "createdBy")
-    VALUES ($1, $2, $3, $4) RETURNING *
+    ("picture", "title", "content", "createdBy", "categoryId", "statusId")
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
     `
-    const values = [data.picture, data.title, data.content, data.createdBy]
+    const values = [data.picture, data.title, data.content, data.createdBy, data.categoryId, data.statusId]
     const { rows } = await db.query(query, values)
     return rows[0]
 }

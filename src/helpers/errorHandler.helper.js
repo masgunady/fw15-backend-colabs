@@ -18,6 +18,20 @@ const errorHandler = (response, error) => {
             message: "Token is invalid"
         })
     }
+    if(error?.message?.includes("please_sign_in")) {
+        console.log(error)
+        return response.status(401).json({
+            success: false, 
+            message: "Please login to create article!"
+        })
+    }
+    if(error?.message?.includes("category_not_found")) {
+        console.log(error)
+        return response.status(401).json({
+            success: false, 
+            message: "category id not found!"
+        })
+    }
     if(error?.message?.includes("invalid signature")) {
         
         return response.status(401).json({
