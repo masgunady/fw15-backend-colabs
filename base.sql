@@ -51,6 +51,16 @@ CREATE TABLE "forgotRequest" (
     "updateAt" TIMESTAMP DEFAULT NULL
 );
 
+CREATE TABLE "articles" (
+    "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "picture" VARCHAR(255),
+    "title" VARCHAR(255),
+    "content" TEXT,
+    "createdBy" INTEGER,
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NULL
+);
+
 ALTER TABLE "comments" ADD COLUMN "userId" INTEGER;
 
 ALTER TABLE "comments" DROP COLUMN "email";

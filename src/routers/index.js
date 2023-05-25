@@ -20,7 +20,7 @@ router.use("/profile", authMiddleware, require("./profile.router"))
 
 // router.use("/saved-article", require("./savedProfile.router"))
 
-// router.use("/articles", require("./article.router"))
+router.use("/article", require("./article.router"))
 // router.use("/category", require("./category.router"))
 // router.use("/notifications", require("./notifications.router"))
 // router.use("/write-article", require("./write-article.router"))
