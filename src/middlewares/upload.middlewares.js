@@ -11,7 +11,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: "Team Collab/team2",
+        folder: "teamcollab/team2",
         format: async (req, file) => "png", // supports promises as well
         public_id: (req, file) => {
             const filename = new Date().getTime().toString()
