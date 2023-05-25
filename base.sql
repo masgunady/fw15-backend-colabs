@@ -34,11 +34,13 @@ CREATE TABLE "tags" (
 );
 
 
+
 CREATE TABLE "comments" (
     "id"INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "name" VARCHAR (255),
-    "email" VARCHAR (255) UNIQUE,
+    "userId" INTEGER,
     "articleId" INTEGER,
+    "content" VARCHAR (255) UNIQUE,
     "createdAt" TIMESTAMP DEFAULT NOW(),
     "updateAt" TIMESTAMP DEFAULT NULL
 );
@@ -61,8 +63,26 @@ CREATE TABLE "articles" (
     "updatedAt" TIMESTAMP DEFAULT NULL
 );
 
+CREATE TABLE "likes" (
+    "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "articleId" INTEGER,
+    "userId" INTEGER,
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE "statusArticle" (
+    "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "status" VARCHAR(10),
+    "createdAt" TIMESTAMP DEFAULT NOW(),
+    "updatedAt" TIMESTAMP DEFAULT NULL
+);
+
+INSERT INTO "statusArticle" ("status") VALUES ('pending'),('posted'),('rejected');
+
 ALTER TABLE "comments" ADD COLUMN "userId" INTEGER;
 
 ALTER TABLE "comments" DROP COLUMN "email";
 
 ALTER TABLE "comments" ADD COLUMN "content" TEXT;
+DELETE FROM "likes" WHERE "userId"='1' AND "id"='1' RETURNING *;
