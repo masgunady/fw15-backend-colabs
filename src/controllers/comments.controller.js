@@ -1,5 +1,6 @@
 const errorHandler = require("../helpers/errorHandler.helper")
 const commentsModel = require("../models/comments.model")
+const profileModel = require("../models/profile.model")
 
 exports.getAllComments = async (req, res) => {
     try { 
@@ -70,30 +71,68 @@ exports.getOneComments = async (req, res)=>{
     }
 }
 
+exports.getCommentByArticle = async (req, res) => {
+    try {
+        const articleId = req.params.articleId
+        const comment = await commentsModel.findByArticle(articleId)
+        console.log(comment)
+        if (!comment){
+            throw Error("no_comment_written_here")
+        }
+        return res.json({
+            success: true,
+            message: "All Comments on the selected Article",
+            results: comment
+        })
+    } catch (err) {
+        return errorHandler(res, err)
+    }
+
+}
+
 
 
 exports.createComments = async (req, res) => {
     try {
-        if (!req.body.name ||
-            !req.body.email ||
-            (!req.body.articleId || isNaN(req.body.articleId))) {
-            return res.status(404).json({
-                success:false,
-                message:"Error: Data cannot be empty",
-                results:""
-            })
+        // if (!req.body.name ||
+        //     !req.body.email ||
+        //     (!req.body.articleId || isNaN(req.body.articleId))) {
+        //     return res.status(404).json({
+        //         success:false,
+        //         message:"Error: Data cannot be empty",
+        //         results:""
+        //     })
+        // }
+        const {id} = req.user
+        console.log(id)
+        const profile = await profileModel.findOneByUserId(id)
+        console.log(profile)
+        const dataComment = {
+            ...req.body,
+            email: profile.email,
+            name: profile.name,
+            userId: id
         }
-        const data = {
-            ...req.body
+        console.log(dataComment)
+        const comments = await commentsModel.insert(dataComment)
+        console.log(comments)
+
+        const results = {
+            userPicture: profile.picture,
+            username: profile.name,
+            comment: dataComment.content
         }
-        const comments = await commentsModel.insert(data)
+
         return res.json({
             success: true,
-            message: "Creat comments succesfully",
-            results: comments
+            message: "Create comments succesfully",
+            results
         })
     } catch (err) {
-        return errorHandler(res, err)
+        return res.status(400).json({
+            success: false,
+            message: "Can't write this comment, Same comment with before"
+        })
     }
 }
 

@@ -31,6 +31,20 @@ exports.findOne = async function (userId) {
     const { rows } = await db.query(query, values)
     return rows[0]
 }
+exports.findByArticle = async function (articleId) {
+    const query = `
+    SELECT 
+    "p"."picture",
+    "p"."fullName" as "username",
+    "c"."content" as "comment"
+    FROM "comments" c
+    JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
+    WHERE "c"."articleId"= $1
+`
+    const values = [articleId]
+    const { rows } = await db.query(query, values)
+    return rows
+}
 
 exports.insert = async function (data) {
     const query = `
