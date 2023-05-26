@@ -15,6 +15,7 @@ router.use("/comments", require("./comments.router"))
 router.use("/likes", authMiddleware, require("./likes.router"))
 // router.use("/admin", authMiddleware, require("./admin/admin.router"))
 router.use("/profile", authMiddleware, require("./profile.router"))
+router.use("/request", authMiddleware, require("./request.router"))
 // router.use("/edit-profile", require("./editProfile.router"))
 
 // router.use("/saved-article", require("./editProfile.router"))

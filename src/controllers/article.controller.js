@@ -2,6 +2,7 @@ const articleModel = require("../models/article.model")
 const categoryModel = require("../models/category.model")
 const articleStatusModel = require("../models/statusArticle.model")
 const profileModel = require("../models/profile.model")
+const requestArticleModel = require("../models/request.model")
 const fileremover = require("../helpers/fileRemover.helper")
 const erorrHandler = require("../helpers/errorHandler.helper")
 
@@ -80,6 +81,7 @@ exports.createManageArticle = async (request, response) => {
         
         
         const {id} = request.user
+        console.log(id)
         const data = {
             ...request.body,
             createdBy: id,
@@ -94,12 +96,22 @@ exports.createManageArticle = async (request, response) => {
             throw Error("failed_create_article")
         }
 
+        const textMessage = "request to publish article"
+        const dataRequest = {
+            articleId: dataArticle.id,
+            userId: id,
+            message: textMessage,
+            typeRequest:"article",
+            statusRequest:1
+        }
+        const createRequest = await requestArticleModel.insertRequestArticle(dataRequest)
+        console.log(createRequest)
 
         const status = await articleStatusModel.findOne(dataArticle.statusId)
-        const created = await profileModel.findOne(dataArticle.createdBy)
+        const userCreated = await profileModel.findOneByUserId(id)
         const category = await categoryModel.findOne(dataArticle.categoryId)
         
-        // console.log(status.status, created.fullName, category.name)
+        // return console.log(status.status, userCreated.name, category.name)
 
         const results = {
             id:dataArticle.id,
@@ -107,13 +119,10 @@ exports.createManageArticle = async (request, response) => {
             title: dataArticle.title,
             content: dataArticle.content,
             category: category.name,
-            createdBy: created.fullName,
+            createdBy: userCreated.name,
             status: status.status,
             createdAt: dataArticle.createdAt,
             updatedAt: dataArticle.updatedAt
-
-
-
         }
         
         return response.json({

@@ -168,3 +168,22 @@ exports.destroyByIdAndUserId = async function (id, createdBy) {
     const { rows } = await db.query(query, values)
     return rows[0]
 }
+
+exports.accRequestArticle = async(id) => {
+    const query = `
+    UPDATE "${table}" SET "statusId" = 2 WHERE "id" = $1
+    RETURNING *
+    `
+    const values = [id]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
+exports.rejectRequestArticle = async(id) => {
+    const query = `
+    UPDATE "${table}" SET "statusId" = 3 WHERE "id" = $1
+    RETURNING *
+    `
+    const values = [id]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
