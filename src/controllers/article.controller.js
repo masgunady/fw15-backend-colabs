@@ -68,8 +68,8 @@ exports.createManageArticle = async (request, response) => {
     try {
 
         const {role} = request.user
-        
-        if(role !== 2 && role !== 3){
+        console.log(request.user)
+        if(role === "standard"){
             throw Error("please_sign_in")
         }
         const {categoryId} = request.body

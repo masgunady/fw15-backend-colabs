@@ -20,7 +20,16 @@ exports.findAllUsers = async function(page, limit, search, sort, sortBy){
 
 exports.findOne = async function(id){
     const query = `
-  SELECT  * FROM "users" WHERE id=$1
+    SELECT
+    "u"."id",
+    "u"."email",
+    "u"."password",
+    "r"."code" as "role",
+    "u"."createdAt",
+    "u"."updatedAt"
+    FROM "users" "u"
+    JOIN "role" "r" ON "r"."id" = "u"."roleId"
+    WHERE "u"."id" = $1
   `
     const values = [id]
     const {rows} = await db.query(query, values)
@@ -28,7 +37,16 @@ exports.findOne = async function(id){
 }
 exports.findOneByEmail = async function(email){
     const query = `
-  SELECT  * FROM "users" WHERE email=$1
+    SELECT
+    "u"."id",
+    "u"."email",
+    "u"."password",
+    "r"."code" as "role",
+    "u"."createdAt",
+    "u"."updatedAt"
+    FROM "users" "u"
+    JOIN "role" "r" ON "r"."id" = "u"."roleId"
+    WHERE "u".email=$1
   `
     const values = [email]
     const {rows} = await db.query(query, values)
