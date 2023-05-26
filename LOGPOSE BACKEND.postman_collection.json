@@ -18,7 +18,7 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "mas_haaland@mail.com",
+									"value": "gondrong@mail.com",
 									"type": "default"
 								},
 								{
@@ -51,7 +51,7 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "alpacino@mail.com",
+									"value": "gondrong@mail.com",
 									"type": "default"
 								},
 								{
@@ -183,42 +183,41 @@
 								{
 									"key": "picture",
 									"type": "file",
-									"src": "/C:/Users/DELL/Downloads/erling-haaland-man-city-seharusnya-bisa-bikin-mu-lebih-menderita.jpg",
+									"src": [],
 									"disabled": true
 								},
 								{
 									"key": "username",
-									"value": "@mas_haaland",
+									"value": "@mas_kane",
 									"type": "default",
 									"disabled": true
 								},
 								{
 									"key": "fullName",
-									"value": "Haaland Firmansyah",
-									"type": "default",
-									"disabled": true
+									"value": "Si Gondrong",
+									"type": "default"
 								},
 								{
 									"key": "email",
 									"value": "mas_haaland@mail.com",
-									"type": "default"
+									"type": "default",
+									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "123!@#ABC",
-									"type": "default"
+									"type": "default",
+									"disabled": true
 								},
 								{
 									"key": "job",
-									"value": "Cetak Skor & Pecahin Rekor",
-									"type": "default",
-									"disabled": true
+									"value": "Cetak Skor & Cape Ngaptenin Inggris",
+									"type": "default"
 								},
 								{
 									"key": "about",
-									"value": "Mantan kepala suku Viking Norwegia",
-									"type": "default",
-									"disabled": true
+									"value": "Mantan Armada Perang Inggris di WC",
+									"type": "default"
 								}
 							]
 						},
@@ -493,6 +492,84 @@
 			]
 		},
 		{
+			"name": "COMMENTS",
+			"item": [
+				{
+					"name": "GET ALL COMMENT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/comments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE COMMENTS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "articleId",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "content",
+									"value": "Wah palanya botak , gua dong gondrong",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/comments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET COMMENT BY ARTICLE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/comments/:articleId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments",
+								":articleId"
+							],
+							"variable": [
+								{
+									"key": "articleId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "LIKES",
 			"item": [
 				{
@@ -617,12 +694,17 @@
 										},
 										{
 											"key": "title",
-											"value": "The Most Famous Van Gogh Paintings Everyone Should Know",
+											"value": "Hype or overhyped: How local listeners are split over Coldplay",
 											"type": "default"
 										},
 										{
 											"key": "content",
-											"value": "\nVincent Van Gogh‘s paintings are adored around the world. His unique post-impressionist technique, with swathing brushstrokes and striking colors, is instantly recognizable.\n\nWhile alive, the artist’s work was not so well received and he sold very few of his paintings. He became posthumously celebrated and now he is one of the most famous painters ever to have lived, with his original artworks selling for millions. Some of Van Gogh’s most expensive paintings include the Portrait de l’artiste sans barbe (1889) which sold for $71.5 million in 1998 and Portrait du Docteur Gachet (1890) which sold for $82.5 million in 1990. While many original Van Gogh paintings are scattered around the world’s greatest museums and private collections, many of them now sit in the Van Gogh Museum in Amsterdam.",
+											"value": "Facebook Twitter Linkedin Yohana Belinda and Radhiyya Indra (The Jakarta Post) PREMIUM Jakarta   ●   Thu, May 25 2023 From biggest fan to “not for me”, Indonesian listeners still seem to be divided over the British band, notwithstanding its large local fan base. International music festivals and concerts have been experiencing a renaissance since 2022, when The Script and Westlife were two of the few international acts to return to Indonesia after the easing of coronavirus restrictions. This year has seen other foreign musicians and groups, including Blackpink and BTS’ Suga, playing to local crowds, but not everyone is following the latest hype over British rock band Coldplay.",
+											"type": "default"
+										},
+										{
+											"key": "categoryId",
+											"value": "3",
 											"type": "default"
 										}
 									]
