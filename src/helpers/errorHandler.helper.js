@@ -22,7 +22,7 @@ const errorHandler = (response, error) => {
         console.log(error)
         return response.status(401).json({
             success: false, 
-            message: "Please login to create article!"
+            message: "Please login to create article or request to be an author!"
         })
     }
     if(error?.message?.includes("category_not_found")) {

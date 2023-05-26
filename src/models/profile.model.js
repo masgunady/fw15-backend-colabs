@@ -39,6 +39,7 @@ exports.findOneByUserId = async function(userId){
     "p"."fullName" as "name",
     "p"."username",
     "u"."email",
+    "r"."code" as "role",
     "p"."phoneNumber",
     "p"."job",
     "p"."about",
@@ -47,6 +48,7 @@ exports.findOneByUserId = async function(userId){
 
     FROM "${table}" "p"
     JOIN "users" "u" ON "u"."id" = "p"."userId"
+    JOIN "role" "r" ON "r"."id" = "u"."roleId"
     WHERE "p"."userId"=$1
     `
     

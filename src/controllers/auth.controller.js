@@ -17,7 +17,7 @@ exports.login = async (request, response) => {
         if(!verify){
             throw Error("wrong_credentials")
         }
-        const token = jwt.sign({id: user.id, role:user.roleId}, APP_SECRET)
+        const token = jwt.sign({id: user.id, role: user.role}, APP_SECRET)
         return response.json({
             success: true,
             message: "Login Success!",
@@ -33,7 +33,7 @@ exports.register = async(request, response) => {
         const {phoneNumber, password} = request.body
 
         const hash = await argon.hash(password)
-        const standardUser = 1
+        const standardUser = 3
         const data = {
             ...request.body,
             password: hash,
@@ -46,7 +46,7 @@ exports.register = async(request, response) => {
             userId: user.id
         }
         await profileModel.insert(profileData)
-        const token = jwt.sign({id: user.id, role: user.roleId}, APP_SECRET)
+        const token = jwt.sign({id: user.id, role: user.role}, APP_SECRET)
         return response.json({
             success: true,
             message: "Register Success!",

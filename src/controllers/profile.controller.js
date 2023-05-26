@@ -31,6 +31,8 @@ exports.updateProfile = async(req, res) => {
             updatedUser = await userModel.findOne(id)
         }
 
+
+
         if(data.password){
             updatedUser = await userModel.update(id, {
                 password: await argon.hash(data.password)
@@ -42,7 +44,7 @@ exports.updateProfile = async(req, res) => {
         const results = {
             ...profile,
             email: updatedUser?.email,
-            password: updatedUser?.password
+            role: user.role
         }
         return res.json({
             success: true,
