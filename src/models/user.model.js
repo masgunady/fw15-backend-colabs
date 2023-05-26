@@ -86,3 +86,23 @@ exports.destroy = async function(id){
     const {rows} = await db.query(query, values)
     return rows [0]
 }
+
+exports.rejectRequestAuthor = async(id) => {
+    const query = `
+    UPDATE "users" SET "roleId" = 1 WHERE "id" = $1
+    RETURNING *
+    `
+    const values = [id]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
+
+exports.accRequestAuthor = async(id) => {
+    const query = `
+    UPDATE "users" SET "roleId" = 2 WHERE "id" = $1
+    RETURNING *
+    `
+    const values = [id]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
