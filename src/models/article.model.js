@@ -60,27 +60,45 @@ exports.findAll = async function (params) {
     WHERE "title" LIKE $1 
     `
     const countValues = [`%${params.searchName}%` ]
-    console.log(countValues)
+    // console.log(countValues)
     const {rows: countRows} = await db.query(countQuery, countValues)
 
     const query = `
 
-    SELECT "a"."picture", 
+    SELECT 
+    "a"."picture",
     "a"."id",
-    "a"."title", 
-    left("a"."content", 100) as "content",
-    COUNT("li"."id")::INTEGER as "likeCount",
-    "a"."createdBy", "a"."createdAt", "a"."updatedAt" 
-
-    FROM "${table}" "a"
-    LEFT JOIN "likes" as "li" ON "li"."articleId" = "a"."id"
-    WHERE "a"."title" LIKE $1 
-    GROUP BY "a"."id"
-
+		LEFT("a"."title", 50) AS "title",
+    LEFT("a"."content", 100) AS "content",
+    "p"."fullName" AS "author",
+		"c"."name" AS "category",
+    COUNT("li"."id")::INTEGER AS "likeCount",
+    "a"."createdAt",
+    "a"."updatedAt"
+    FROM 
+        "articles" "a"
+    LEFT JOIN 
+        "categories" AS "c" ON "c"."id" = "a"."categoryId"
+    LEFT JOIN 
+        "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
+    LEFT JOIN 
+        "likes" AS "li" ON "li"."articleId" = "a"."id"
+    WHERE 
+        "a"."title" LIKE $1
+    GROUP BY 
+        "a"."picture",
+        "a"."id",
+        "title",
+        "content",
+        "p"."fullName",
+        "c"."name",
+        "a"."createdAt",
+        "a"."updatedAt"
+   
     ORDER BY "${params.sortBy}" ${params.sort}
     LIMIT ${params.limit} OFFSET ${offset}
     `
-    console.log(query)
+    // console.log(query)
     const values = [`%${params.searchName}%` ]
     const { rows } = await db.query(query, values)
     return {rows, pageInfo: {
@@ -97,7 +115,7 @@ exports.findOne = async function (id) {
   FROM "${table}"
   WHERE "id" = $1
   `
-    console.log(query)
+    // console.log(query)
     const values = [id]
     const { rows } = await db.query(query, values)
     return {rows}
