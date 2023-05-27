@@ -47,6 +47,7 @@ exports.findAll = async function (params) {
     params.page = parseInt(params.page) || 1
     params.limit = parseInt(params.limit) || 5
     params.searchName = params.searchName || ""
+    params.category = params.category || ""
     params.searchCategory = params.searchCategory || ""
     params.searchLocation = params.searchLocation || ""
     params.sort = params.sort || "ASC"
@@ -68,7 +69,7 @@ exports.findAll = async function (params) {
     SELECT 
     "a"."picture",
     "a"."id",
-		LEFT("a"."title", 50) AS "title",
+		LEFT("a"."title", 40) AS "title",
     LEFT("a"."content", 100) AS "content",
     "p"."fullName" AS "author",
 		"c"."name" AS "category",
@@ -85,6 +86,8 @@ exports.findAll = async function (params) {
         "likes" AS "li" ON "li"."articleId" = "a"."id"
     WHERE 
         "a"."title" LIKE $1
+    AND
+    "c"."name" LIKE $2
     GROUP BY 
         "a"."picture",
         "a"."id",
@@ -99,7 +102,7 @@ exports.findAll = async function (params) {
     LIMIT ${params.limit} OFFSET ${offset}
     `
     // console.log(query)
-    const values = [`%${params.searchName}%` ]
+    const values = [`%${params.searchName}%`, `%${params.category}%` ]
     const { rows } = await db.query(query, values)
     return {rows, pageInfo: {
         totaData: countRows[0].count,
