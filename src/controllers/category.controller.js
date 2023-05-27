@@ -4,7 +4,6 @@ const fileRemover = require("../helpers/fileRemover.helper")
 
 
 exports.getAllCategories = async (req, res) => {
-    console.log(req.query)
     try {
         const sortWhaitlist = ["name"]
         if (req.query.sort && !sortWhaitlist.includes(req.query.sort)) {
@@ -35,7 +34,6 @@ exports.getAllCategories = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error)
         return errorHandler(res, error)
 
     }
@@ -50,9 +48,9 @@ exports.getOneCategories = async (req, res) => {
             })
         }
         const data = await caterogyModels.findOne(req.params.id)
-        console.log(data)
+        
         if (data) {
-            console.log(data)
+   
             return res.json({
                 success: true,
                 message: "Detail categories",
@@ -60,7 +58,7 @@ exports.getOneCategories = async (req, res) => {
             })
         }
         else {
-            console.log(data)
+   
             return res.status(404).json({
                 success: false,
                 message: "Error : Data not found",
@@ -69,7 +67,7 @@ exports.getOneCategories = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error)
+        
         return errorHandler(res, error)
 
     }
@@ -100,7 +98,6 @@ exports.createCategories = async (req, res) => {
             data.picture = req.file.path
         }
         const categories = await caterogyModels.insert(data)
-        console.log(data)
         return res.json({
             success: true,
             message: "Create categories success",
@@ -122,7 +119,6 @@ exports.updateCategories = async (req, res) => {
             })
         }
         const id = req.params.id
-        console.log(id)
         const user = await caterogyModels.findOne(id)
         
         const data = {

@@ -111,14 +111,46 @@ exports.findAll = async function (params) {
 
 exports.findOne = async function (id) {
     const query = `
-  SELECT "picture", "id", "title", left("content", 100), "createdBy", "createdAt", "updatedAt" 
-  FROM "${table}"
-  WHERE "id" = $1
+    SELECT 
+    "a"."picture",
+    "a"."id",
+    "a"."title",
+    "a"."content",
+    "p"."fullName" AS "author",
+    "rl"."name" AS "role", 
+		"c"."name" AS "category",
+    COUNT("li"."id")::INTEGER AS "likeCount",
+    "a"."createdAt",
+    "a"."updatedAt"
+    FROM 
+        "articles" "a"
+    LEFT JOIN 
+        "categories" AS "c" ON "c"."id" = "a"."categoryId"
+    LEFT JOIN 
+        "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
+    LEFT JOIN 
+        "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "users" AS "u" ON "u"."id" = "p"."userId"
+    LEFT JOIN 
+        "role" AS "rl" ON "rl"."id" = "u"."roleId"
+    WHERE "a"."id" = $1
+    GROUP BY 
+        "a"."picture",
+        "a"."id",
+        "a"."title",
+        "a"."content",
+        "p"."fullName",
+        "rl"."name",
+        "c"."name",
+        "a"."createdAt",
+        "a"."updatedAt"
+  
   `
     // console.log(query)
     const values = [id]
     const { rows } = await db.query(query, values)
-    return {rows}
+    return rows[0]
 }
 
 
