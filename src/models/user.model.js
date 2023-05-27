@@ -89,7 +89,7 @@ exports.destroy = async function(id){
 
 exports.rejectRequestAuthor = async(id) => {
     const query = `
-    UPDATE "users" SET "roleId" = 1 WHERE "id" = $1
+    UPDATE "users" SET "roleId" = 3 WHERE "id" = $1
     RETURNING *
     `
     const values = [id]

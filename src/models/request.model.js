@@ -27,7 +27,9 @@ exports.findAll = async() => {
     "a"."id" AS "articleId",
     "ra"."typeRequest",
     "ra"."message",
-    "ra"."statusRequest"
+    "ra"."statusRequest",
+    "ra"."createdAt",
+    "ra"."updatedAt"
     FROM "requestArticle" "ra"
     LEFT JOIN "users" "u" ON "u"."id" = "ra"."userId"
     LEFT JOIN "profiles" "p" ON "p"."userId" = "u"."id"
