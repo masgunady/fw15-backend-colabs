@@ -38,13 +38,12 @@ exports.getArticle = async (request, response) => {
 
 exports.getManageAllArticle = async (request, response) => {
     try {
-        const { id } = request.user
-        console.log(id)
-        const data = await articleModel.findAllManageArticle(id)
+        const {rows: results, pageInfo} = await articleModel.findAllManageArticle(request.query)
         return response.json({
             success: true,
             message: "List of all Manage Article",
-            results: data
+            pageInfo,
+            results
         })
     } catch (err) {
         return erorrHandler(response, err)
