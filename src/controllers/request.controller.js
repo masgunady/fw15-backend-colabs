@@ -8,7 +8,7 @@ const articleModel = require("../models/article.model")
 exports.getAllRequestArticle = async(req, res) => {
     try {
         const {role} = req.user
-        console.log(req.user)
+        
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
@@ -51,7 +51,6 @@ exports.insertRequestAuthor = async(req,res) => {
 exports.accRequestArticle = async(req, res) => {
     try {
         const {role} = req.user
-        console.log(req.user)
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
@@ -71,7 +70,6 @@ exports.accRequestArticle = async(req, res) => {
 exports.rejectRequestArticle = async(req, res) => {
     try {
         const {role} = req.user
-        console.log(req.user)
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
@@ -91,17 +89,24 @@ exports.rejectRequestArticle = async(req, res) => {
 exports.accRequestAuthor = async(req, res) => {
     try {
         const {role} = req.user
-        console.log(req.user)
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
         const {userId, requestId} = req.body
         const accRequestAuthor = await userModel.accRequestAuthor(userId)
         await requestModel.changeStatusRequest(requestId)
+        
+        const results = {
+            id: accRequestAuthor.id,
+            email: accRequestAuthor.email,
+            roleId: accRequestAuthor.roleId
+
+        }
+
         return res.json({
             success: true,
             message: "request accepted",
-            results: accRequestAuthor
+            results
         })
     } catch (error) {
         return errorHandler(res, error)
@@ -111,17 +116,22 @@ exports.accRequestAuthor = async(req, res) => {
 exports.rejectRequestAuthor = async(req, res) => {
     try {
         const {role} = req.user
-        console.log(req.user)
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
         const {userId, requestId} = req.body
         const rejectRequestAuthor = await userModel.rejectRequestAuthor(userId)
         await requestModel.changeStatusRequest(requestId)
+        const results = {
+            id: rejectRequestAuthor.id,
+            email: rejectRequestAuthor.email,
+            roleId: rejectRequestAuthor.roleId
+
+        }
         return res.json({
             success: true,
             message: "request accepted",
-            results: rejectRequestAuthor
+            results
         })
     } catch (error) {
         return errorHandler(res, error)

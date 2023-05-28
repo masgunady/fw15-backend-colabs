@@ -24,12 +24,17 @@ exports.findAll = async() => {
    "u"."id" AS "userId",
     "p"."picture",
     "p"."fullName",
+    "a"."id" AS "articleId",
     "ra"."typeRequest",
     "ra"."message",
-    "ra"."statusRequest"
+    "ra"."statusRequest",
+    "ra"."createdAt",
+    "ra"."updatedAt"
     FROM "requestArticle" "ra"
-    JOIN "users" "u" ON "u"."id" = "ra"."userId"
-    JOIN "profiles" "p" ON "p"."userId" = "u"."id"
+    LEFT JOIN "users" "u" ON "u"."id" = "ra"."userId"
+    LEFT JOIN "profiles" "p" ON "p"."userId" = "u"."id"
+    LEFT JOIN "articles" "a" ON "a"."id" = "ra"."articleId"
+    WHERE "ra"."statusRequest" = 1
     `
     // ORDER BY "${params.sort}" ${params.sortBy} 
     // LIMIT $1 OFFSET $2

@@ -10,6 +10,7 @@ const erorrHandler = require("../helpers/errorHandler.helper")
 exports.getAllArticle = async (request, response) => {
     try {
         const {rows: results, pageInfo} = await articleModel.findAll(request.query)
+        // return console.log(request.query)
         return response.json({
             success: true,
             message: "List of all article",
