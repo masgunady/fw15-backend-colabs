@@ -21,6 +21,19 @@ exports.getAllArticle = async (request, response) => {
         return erorrHandler(response, err)
     }
 }
+exports.getAllArticleByUser = async (request, response) => {
+    try {
+        const id = request.params.id
+        const data = await articleModel.findOneByUser(id, request.query)
+        return response.json({
+            success: true,
+            message: "List of article",
+            results: data
+        })
+    } catch (err) {
+        return erorrHandler(response, err)
+    }
+}
 
 exports.getArticle = async (request, response) => {
     try {
@@ -69,7 +82,6 @@ exports.createManageArticle = async (request, response) => {
     try {
 
         const {role} = request.user
-        console.log(request.user)
         if(role === "standard"){
             throw Error("please_sign_in")
         }
@@ -81,7 +93,6 @@ exports.createManageArticle = async (request, response) => {
         
         
         const {id} = request.user
-        console.log(id)
         const data = {
             ...request.body,
             createdBy: id,
@@ -105,7 +116,6 @@ exports.createManageArticle = async (request, response) => {
             statusRequest:1
         }
         const createRequest = await requestArticleModel.insertRequestArticle(dataRequest)
-        console.log(createRequest)
 
         const status = await articleStatusModel.findOne(dataArticle.statusId)
         const userCreated = await profileModel.findOneByUserId(id)

@@ -13,6 +13,7 @@ articleRouter.patch("/manage/:id", uploadMiddleware("picture"), articleControlle
 
 
 articleRouter.get("/", articleController.getAllArticle)
+articleRouter.get("/by-user/:id", articleController.getAllArticleByUser)
 articleRouter.get("/:id", articleController.getArticle)
 
 articleRouter.delete("/manage/:id", authMiddleware.apply, articleController.deleteManageArticle)

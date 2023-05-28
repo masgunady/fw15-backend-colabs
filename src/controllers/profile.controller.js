@@ -72,3 +72,19 @@ exports.getProfile = async (req, res) => {
         return errorHandler(res, error)
     }
 }
+exports.getProfileInfo = async (req, res) => {
+    try {
+        const id = req.params.id
+        const profile = await profileModel.findOneByUserId(id)
+        if(!profile){
+            throw Error("profile_not_found")
+        }
+        return res.json({
+            success: true,
+            message: "Profile",
+            results: profile
+        })
+    } catch (error) {
+        return errorHandler(res, error)
+    }
+}

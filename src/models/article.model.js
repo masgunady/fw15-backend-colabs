@@ -45,6 +45,7 @@ exports.findAll = async function (params) {
     WHERE 
         "a"."title" LIKE $1
     AND "c"."name" LIKE $2
+    AND "a"."statusId" = 2
 
     GROUP BY 
         "a"."picture",
@@ -78,8 +79,9 @@ exports.findOne = async function (id) {
     "a"."title",
     "a"."content",
     "p"."fullName" AS "author",
-    "rl"."name" AS "role", 
-		"c"."name" AS "category",
+    "rl"."name" AS "role",
+    "p"."userId" AS "authorId",
+	"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
     "a"."createdAt",
     "a"."updatedAt"
@@ -103,6 +105,7 @@ exports.findOne = async function (id) {
         "a"."content",
         "p"."fullName",
         "rl"."name",
+        "p"."userId",
         "c"."name",
         "a"."createdAt",
         "a"."updatedAt"
@@ -112,6 +115,62 @@ exports.findOne = async function (id) {
     const values = [id]
     const { rows } = await db.query(query, values)
     return rows[0]
+}
+
+exports.findOneByUser = async function (id, params) {
+    console.log(params)
+    params.page = parseInt(params.page) || 1
+    params.limit = parseInt(params.limit) || 5
+    params.sort = params.sort || "ASC"
+    params.sortBy = params.sortBy || "id"
+
+    const offset = (params.page - 1) * params.limit
+
+    const query = `
+    SELECT 
+    "a"."picture",
+    "a"."id",
+    "a"."title",
+    "a"."content",
+    "p"."fullName" AS "author",
+    "rl"."name" AS "role",
+    "p"."userId" AS "authorId",
+	"c"."name" AS "category",
+    COUNT("li"."id")::INTEGER AS "likeCount",
+    "a"."createdAt",
+    "a"."updatedAt"
+    FROM 
+        "articles" "a"
+    LEFT JOIN 
+        "categories" AS "c" ON "c"."id" = "a"."categoryId"
+    LEFT JOIN 
+        "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
+    LEFT JOIN 
+        "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "users" AS "u" ON "u"."id" = "p"."userId"
+    LEFT JOIN 
+        "role" AS "rl" ON "rl"."id" = "u"."roleId"
+    WHERE "a"."createdBy" = $1
+    GROUP BY 
+        "a"."picture",
+        "a"."id",
+        "a"."title",
+        "a"."content",
+        "p"."fullName",
+        "rl"."name",
+        "p"."userId",
+        "c"."name",
+        "a"."createdAt",
+        "a"."updatedAt"
+
+        ORDER BY "${params.sortBy}" ${params.sort}
+        LIMIT ${params.limit} OFFSET ${offset}
+  `
+    // console.log(query)
+    const values = [id]
+    const { rows } = await db.query(query, values)
+    return rows
 }
 
 

@@ -11,7 +11,7 @@ router.get("/", (request, response) => {
 router.use("/auth", require("./auth.router"))
 router.use("/categories", require("./category.router"))
 router.use("/tags", require("./tags.router"))
-router.use("/comments",authMiddleware, require("./comments.router"))
+router.use("/comments", require("./comments.router"))
 router.use("/likes", authMiddleware, require("./likes.router"))
 // router.use("/admin", authMiddleware, require("./admin/admin.router"))
 router.use("/profile", authMiddleware, require("./profile.router"))
