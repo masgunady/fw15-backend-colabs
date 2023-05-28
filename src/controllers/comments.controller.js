@@ -33,12 +33,13 @@ exports.createComments = async (req, res) => {
             ...req.body,
             userId: id
         }
-        
-        await commentsModel.insert(dataComment)
+        console.log(dataComment)
+        const comment = await commentsModel.insert(dataComment)
         const results = {
             userPicture: profile.picture,
             username: profile.fullName,
-            comment: dataComment.content
+            comment: dataComment.content,
+            createdAt: comment.createdAt
         }
 
         return res.json({
