@@ -33,15 +33,26 @@ exports.findOne = async function (userId) {
     const { rows } = await db.query(query, values)
     return rows[0]
 }
-exports.findByArticle = async function (articleId) {
+exports.findByArticle = async function (articleId, params) {
+
+    params.page = parseInt(params.page) || 1
+    params.limit = parseInt(params.limit) || 5
+    params.searchName = params.searchName || ""
+    params.sort = params.sort || "ASC"
+    params.sortBy = params.sortBy || "id"
+    const offset = (params.page - 1) * params.limit
+
     const query = `
     SELECT 
     "p"."picture",
     "p"."fullName" as "username",
-    "c"."content" as "comment"
+    "c"."content" as "comment",
+    "c"."createdAt"
     FROM "comments" c
     JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
     WHERE "c"."articleId"= $1
+    ORDER BY "${params.sortBy}" ${params.sort}
+    LIMIT ${params.limit} OFFSET ${offset}
 `
     const values = [articleId]
     const { rows } = await db.query(query, values)
