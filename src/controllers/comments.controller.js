@@ -4,6 +4,7 @@ const profileModel = require("../models/profile.model")
 
 exports.getAllComments = async (req, res) => {
     try { 
+        console.log(req.query.articleId)
         const sortWhaitlist = ["name"]
         if(req.query.sort && !sortWhaitlist.includes(req.query.sort)){
             return res.status(400).json({
@@ -24,7 +25,9 @@ exports.getAllComments = async (req, res) => {
             req.query.limit, 
             req.query.search,
             req.query.sort,
-            req.query.sortBy)
+            req.query.sortBy,
+            req.query.articleId
+        )
         return res.json({
             success: true,
             message: "List off all Comments",

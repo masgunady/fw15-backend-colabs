@@ -1,11 +1,12 @@
 const db = require("../helpers/db.helper")
 
-exports.findAllComments = async function (page, limit, search, sort, sortBy) {
+exports.findAllComments = async function (page, limit, search, sort, sortBy, articleId) {
     page = parseInt(page) || 1
     limit = parseInt(limit) || 5
     search = search || ""
     sort = sort || "id"
     sortBy = sortBy || "ASC"
+    articleId = articleId || ""
 
     const offset = (page - 1) * limit
 
@@ -13,9 +14,9 @@ exports.findAllComments = async function (page, limit, search, sort, sortBy) {
     SELECT c.*, "p"."username" AS "username", "p"."picture" AS "picture"
     FROM "comments" c
     JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
-  WHERE "name" LIKE $3 ORDER BY "${sort}" ${sortBy} LIMIT $1  OFFSET $2 
+  WHERE "name" LIKE $3 AND "c"."articleId"=$4 ORDER BY "${sort}" ${sortBy} LIMIT $1  OFFSET $2 
   `
-    const values = [limit, offset, `%${search}%`]
+    const values = [limit, offset, `%${search}%`, articleId]
     const { rows } = await db.query(query, values)
     return rows
 }
