@@ -1,11 +1,8 @@
 const commentsRouter = require("express").Router()
-
+const authMiddleware = require("../middlewares/auth.middlewares")
 const commentsController = require("../controllers/comments.controller")
 
-commentsRouter.get("/", commentsController.getAllComments)
-commentsRouter.get("/:articleId", commentsController.getCommentByArticle)
-commentsRouter.get("/:id", commentsController.getOneComments)
-commentsRouter.post("/", commentsController.createComments)
-commentsRouter.delete("/:id", commentsController.deleteComments)
+commentsRouter.get("/", commentsController.getCommentByArticle)
+commentsRouter.post("/", authMiddleware, commentsController.createComments)
 
 module.exports= commentsRouter

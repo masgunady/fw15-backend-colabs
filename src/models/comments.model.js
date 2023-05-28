@@ -1,21 +1,23 @@
 const db = require("../helpers/db.helper")
 
-exports.findAllComments = async function (page, limit, search, sort, sortBy) {
+exports.findAllComments = async function (page, limit, search, sort, sortBy, articleId) {
     page = parseInt(page) || 1
     limit = parseInt(limit) || 5
     search = search || ""
     sort = sort || "id"
     sortBy = sortBy || "ASC"
+    articleId = articleId || ""
 
     const offset = (page - 1) * limit
 
     const query = `
-    SELECT c.*, "p"."username" AS "username", "p"."picture" AS "picture"
+    SELECT c.*, "p"."fullName", "p"."picture"
     FROM "comments" c
     JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
-  WHERE "name" LIKE $3 ORDER BY "${sort}" ${sortBy} LIMIT $1  OFFSET $2 
-  `
-    const values = [limit, offset, `%${search}%`]
+    WHERE "p"."fullName" LIKE $3 AND "c"."articleId" LIKE $4
+    ORDER BY "${sort}" ${sortBy} LIMIT $1  OFFSET $2 
+    `
+    const values = [limit, offset, `%${search}%`, articleId]
     const { rows } = await db.query(query, values)
     return rows
 }
@@ -48,10 +50,10 @@ exports.findByArticle = async function (articleId) {
 
 exports.insert = async function (data) {
     const query = `
-INSERT INTO "comments" ("name", "userId", "articleId", "content") 
-VALUES ($1, $2, $3, $4) RETURNING *
+INSERT INTO "comments" ("userId", "articleId", "content") 
+VALUES ($1, $2, $3) RETURNING *
 `
-    const values = [data.name, data.userId, data.articleId, data.content]
+    const values = [data.userId, data.articleId, data.content]
     const { rows } = await db.query(query, values)
     return rows[0]
 }
