@@ -61,6 +61,12 @@ exports.forgotPassword = async (request, response) => {
     try{
         const {email} = request.body
         const user = await userModel.findOneByEmail(email)
+        if(!request.body.email){
+            return response.status(404).json({
+                success:false,
+                message:"Email cannot be empty!"
+            })
+        }
         if(!user){
             throw Error("no_user")
         }
