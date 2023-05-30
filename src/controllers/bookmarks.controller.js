@@ -7,7 +7,7 @@ exports.getThisUserBookmarks = async (req, res) => {
     try {
         // return console.log(req.query)
         const {id} = req.user
-        const bookmarked = await bookmarksModel.findByUser(id)
+        const bookmarked = await bookmarksModel.findByUser(id, req.query)
         console.log(bookmarked)
         
         return res.json({

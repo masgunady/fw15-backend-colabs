@@ -32,6 +32,7 @@ exports.findAll = async function (params) {
     "p"."fullName" AS "author",
 		"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
+    ARRAY_AGG("bo"."userId") as "userBookmarked",
     "a"."createdAt",
     "a"."updatedAt"
     FROM 
@@ -42,6 +43,8 @@ exports.findAll = async function (params) {
         "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
     LEFT JOIN 
         "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "bookmarks" AS "bo" ON "bo"."articleId" = "a"."id"
     WHERE 
         "a"."title" LIKE $1
     AND "c"."name" LIKE $2
@@ -83,6 +86,7 @@ exports.findOne = async function (id) {
     "p"."userId" AS "authorId",
 	"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
+    ARRAY_AGG("bo"."userId") as "userBookmarked",
     "a"."createdAt",
     "a"."updatedAt"
     FROM 
@@ -93,6 +97,8 @@ exports.findOne = async function (id) {
         "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
     LEFT JOIN 
         "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "bookmarks" AS "bo" ON "bo"."articleId" = "a"."id"
     LEFT JOIN 
         "users" AS "u" ON "u"."id" = "p"."userId"
     LEFT JOIN 
@@ -137,6 +143,7 @@ exports.findOneByUser = async function (id, params) {
     "p"."userId" AS "authorId",
 	"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
+    ARRAY_AGG("bo"."userId") as "userBookmarked",
     "a"."createdAt",
     "a"."updatedAt"
     FROM 
@@ -147,6 +154,8 @@ exports.findOneByUser = async function (id, params) {
         "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
     LEFT JOIN 
         "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "bookmarks" AS "bo" ON "bo"."articleId" = "a"."id"
     LEFT JOIN 
         "users" AS "u" ON "u"."id" = "p"."userId"
     LEFT JOIN 
@@ -215,6 +224,7 @@ exports.findAllManageArticle = async function (params) {
     "p"."fullName" AS "author",
 		"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
+    ARRAY_AGG("bo"."userId") as "userBookmarked",
     "a"."createdAt",
     "a"."updatedAt"
     FROM 
@@ -225,6 +235,8 @@ exports.findAllManageArticle = async function (params) {
         "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
     LEFT JOIN 
         "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "bookmarks" AS "bo" ON "bo"."articleId" = "a"."id"
     WHERE 
         "a"."title" LIKE $1
     GROUP BY 

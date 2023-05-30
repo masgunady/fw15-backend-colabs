@@ -48,11 +48,37 @@ const db = require("../helpers/db.helper")
 //     return rows
 // }
 
-exports.findByUser = async function (userId) {
+exports.findByUser = async function (userId, params) {
+    params.page = parseInt(params.page) || 1
+    params.limit = parseInt(params.limit) ||20
+    params.sort = params.sort || "DESC"
+    params.sortBy = params.sortBy || "createdAt"
+
+    const offset = (params.page - 1) * params.limit
     const query = `
-    SELECT *
-    FROM "bookmarks"
-    WHERE "userId"= $1 
+    SELECT 
+    "bo"."articleId",
+    "bo"."userId",
+    "a"."picture",
+    "a"."title",
+    "a"."content",
+    COUNT("li"."id")::INTEGER AS "likeCount",
+    "a"."createdAt"
+    FROM "bookmarks" "bo"
+    LEFT JOIN 
+        "articles" AS "a" ON "a"."id" = "bo"."articleId"
+    LEFT JOIN 
+        "likes" AS "li" ON "li"."articleId" = "bo"."articleId"
+    WHERE "bo"."userId"= $1 
+    GROUP BY
+        "bo"."userId",
+        "bo"."articleId",
+        "a"."picture",
+        "a"."title",
+        "a"."content",
+        "a"."createdAt"
+    ORDER BY "${params.sortBy}" ${params.sort}
+    LIMIT ${params.limit} OFFSET ${offset}
     `
     const values = [userId]
     const { rows } = await db.query(query, values)
