@@ -5,15 +5,20 @@ const bookmarksModel = require("../models/bookmarks.model")
 
 exports.getThisUserBookmarks = async (req, res) => {
     try {
-        // return console.log(req.query)
-        const {id} = req.user
-        const bookmarked = await bookmarksModel.findByUser(id)
-        console.log(bookmarked)
         
+        // return console.log(req.query)
+        const { id } = req.user
+        const data = await bookmarksModel.findByUser(id,
+            req.query.page,
+            req.query.limit,
+            req.query.search,
+            req.query.sort,
+            req.query.sortBy)
+
         return res.json({
             success: true,
             message: "All Bookmarked Article by this user",
-            results: bookmarked
+            results: data
         })
     } catch (err) {
         return errorHandler(res, err)
@@ -23,14 +28,21 @@ exports.getThisUserBookmarks = async (req, res) => {
 exports.getOtherUserBookmarks = async (req, res) => {
     try {
         // return console.log(req.query)
-        const bookmarked = await bookmarksModel.findByUser(req.query.userId)
-        console.log(bookmarked)
-        if(!bookmarked){
+        const bookmarked = await bookmarksModel.findByUser(
+            req.query.userId,
+            req.query.page,
+            req.query.limit,
+            req.query.search,
+            req.query.sort,
+            req.query.sortBy)
+
+        if (!bookmarked) {
             return res.json({
                 success: false,
                 message: "No Bookmarked in this Article"
             })
         }
+
         return res.json({
             success: true,
             message: "All Bookmarked Article by other user",
@@ -46,9 +58,9 @@ exports.getOtherUserBookmarks = async (req, res) => {
 exports.createBookmarkedArticle = async (req, res) => {
     try {
 
-        const {id} = req.user
+        const { id } = req.user
         const profile = await profileModel.findOneByUserId(id)
-        
+
         const dataBookmarks = {
             ...req.body,
             userId: profile.id
