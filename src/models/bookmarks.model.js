@@ -53,8 +53,8 @@ exports.findByUser = async function (userId) {
     SELECT b.*, 
     b."userId", 
     b."articleId", 
-    a.title AS "title", 
-    a.content AS "content",
+    substring(a.title, 1, 10) AS "title", 
+    substring(a.content, 1, 40) AS "content",
     a.picture AS "picture"
     FROM "bookmarks" b
     INNER JOIN articles a ON a.id = b."articleId"
