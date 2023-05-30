@@ -18,7 +18,7 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "gondrong@mail.com",
+									"value": "ardanthebackbone@mail.com",
 									"type": "default"
 								},
 								{
@@ -89,7 +89,7 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "cici@mail.com",
+									"value": "fajarSad@email.com",
 									"type": "default"
 								}
 							]
@@ -117,22 +117,22 @@
 							"urlencoded": [
 								{
 									"key": "code",
-									"value": "882700",
+									"value": "583480",
 									"type": "default"
 								},
 								{
 									"key": "email",
-									"value": "cici@mail.com",
+									"value": "fajarSad@email.com",
 									"type": "default"
 								},
 								{
 									"key": "password",
-									"value": "P@ssw0rd123",
+									"value": "123!@#Abc",
 									"type": "default"
 								},
 								{
 									"key": "confirmPassword",
-									"value": "P@ssw0rd123",
+									"value": "123!@#Abc",
 									"type": "default"
 								}
 							]
@@ -194,12 +194,12 @@
 								},
 								{
 									"key": "fullName",
-									"value": "Si Gondrong",
+									"value": "Sumanto Solihun",
 									"type": "default"
 								},
 								{
 									"key": "email",
-									"value": "mas_haaland@mail.com",
+									"value": "ardanthebackbone@mail.com",
 									"type": "default",
 									"disabled": true
 								},
@@ -211,13 +211,15 @@
 								},
 								{
 									"key": "job",
-									"value": "Cetak Skor & Cape Ngaptenin Inggris",
-									"type": "default"
+									"value": "Anak Band",
+									"type": "default",
+									"disabled": true
 								},
 								{
 									"key": "about",
-									"value": "Mantan Armada Perang Inggris di WC",
-									"type": "default"
+									"value": "Temennya Andra",
+									"type": "default",
+									"disabled": true
 								}
 							]
 						},
@@ -521,12 +523,12 @@
 							"urlencoded": [
 								{
 									"key": "articleId",
-									"value": "1",
+									"value": "13",
 									"type": "default"
 								},
 								{
 									"key": "content",
-									"value": "Wah palanya botak , gua dong gondrong",
+									"value": "hmm bahaya juga",
 									"type": "default"
 								}
 							]
@@ -549,18 +551,17 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/comments/:articleId",
+							"raw": "{{url}}/comments?articleId=32",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"comments",
-								":articleId"
+								"comments"
 							],
-							"variable": [
+							"query": [
 								{
 									"key": "articleId",
-									"value": "1"
+									"value": "32"
 								}
 							]
 						}
@@ -582,12 +583,12 @@
 							"urlencoded": [
 								{
 									"key": "articleId",
-									"value": "2",
+									"value": "10",
 									"type": "default"
 								},
 								{
 									"key": "userId",
-									"value": "1",
+									"value": "5",
 									"type": "default"
 								}
 							]
@@ -642,13 +643,28 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/article/manage",
+									"raw": "{{url}}/article/manage?limit=4&page=1",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"article",
 										"manage"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "4"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "category",
+											"value": "",
+											"disabled": true
+										}
 									]
 								}
 							},
@@ -672,7 +688,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "1"
+											"value": "10"
 										}
 									]
 								}
@@ -811,7 +827,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "6"
 								}
 							]
 						}
@@ -824,7 +840,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/article",
+							"raw": "{{url}}/article?page=1&limit=5&category=maritim&sort=DESC",
 							"host": [
 								"{{url}}"
 							],
@@ -834,7 +850,28 @@
 							"query": [
 								{
 									"key": "searchName",
-									"value": "Jakarta",
+									"value": "indonesia",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "category",
+									"value": "maritim"
+								},
+								{
+									"key": "sort",
+									"value": "DESC"
+								},
+								{
+									"key": "sortBy",
+									"value": "likeCount",
 									"disabled": true
 								}
 							]
@@ -861,6 +898,87 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "BOOKMARKS",
+			"item": [
+				{
+					"name": "CREATE BOOKMARKS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "articleId",
+									"value": "12",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/bookmarks/manage",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bookmarks",
+								"manage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY THIS USER",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/bookmarks",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bookmarks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY OTHERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/bookmarks?userId=26",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bookmarks"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "26"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET ONE USER NOTIFICATION TO ADMIN",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	],
 	"auth": {
