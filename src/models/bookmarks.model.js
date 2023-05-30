@@ -50,10 +50,16 @@ const db = require("../helpers/db.helper")
 
 exports.findByUser = async function (userId) {
     const query = `
-    SELECT *
-    FROM "bookmarks"
-    WHERE "userId"= $1 
-    `
+    SELECT b.*, 
+    b."userId", 
+    b."articleId", 
+    a.title AS "title", 
+    a.content AS "content",
+    a.picture AS "picture"
+    FROM "bookmarks" b
+    INNER JOIN articles a ON a.id = b."articleId"
+    WHERE b."userId" = $1
+  `
     const values = [userId]
     const { rows } = await db.query(query, values)
     return rows
@@ -64,7 +70,7 @@ exports.insertBookmarkedArticle = async function (data) {
     INSERT INTO "bookmarks" ("userId", "articleId") 
     VALUES ($1, $2) RETURNING *
     `
-    const values = [data.userId, data.articleId]
+    const values = [data.userId, data.articleId. data.likes]
     const { rows } = await db.query(query, values)
     return rows[0]
 }
