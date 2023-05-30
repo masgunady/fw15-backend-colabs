@@ -48,6 +48,7 @@ const db = require("../helpers/db.helper")
 //     return rows
 // }
 
+<<<<<<< HEAD
 exports.findByUser = async function (userId, params) {
     params.page = parseInt(params.page) || 1
     params.limit = parseInt(params.limit) ||20
@@ -81,6 +82,34 @@ exports.findByUser = async function (userId, params) {
     LIMIT ${params.limit} OFFSET ${offset}
     `
     const values = [userId]
+=======
+exports.findByUser = async function ( userId, page, limit, search, sort, sortBy) {
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+    search = search || ""
+    sort = sort || "id"
+    sortBy = sortBy || "ASC"
+
+    const offset = (page - 1) * limit
+
+    const query = `
+    SELECT b.*, 
+    b."userId", 
+    b."articleId", 
+    substring(a.title, 1, 10) AS "title", 
+    substring(a.content, 1, 40) AS "content",
+    a.picture AS "picture",
+    "li"."id" AS "likeCount"
+    FROM "bookmarks" b 
+    INNER JOIN articles a ON a.id = b."articleId"
+    INNER JOIN likes li ON "li"."id" = "b"."articleId"
+    WHERE b."userId" = $4 AND
+    "title" LIKE $3
+    ORDER BY "${sort}" ${sortBy} 
+    LIMIT $1 OFFSET $2
+  `
+    const values = [limit, offset, `%${search}%`, userId]
+>>>>>>> e8e6210d09fe1d1258e61bc8305569d1df509396
     const { rows } = await db.query(query, values)
     return rows
 }
