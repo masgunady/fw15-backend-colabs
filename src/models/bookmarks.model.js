@@ -70,7 +70,7 @@ exports.insertBookmarkedArticle = async function (data) {
     INSERT INTO "bookmarks" ("userId", "articleId") 
     VALUES ($1, $2) RETURNING *
     `
-    const values = [data.userId, data.articleId. data.likes]
+    const values = [data.userId, data.articleId]
     const { rows } = await db.query(query, values)
     return rows[0]
 }
