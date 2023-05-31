@@ -32,7 +32,6 @@ exports.findAll = async function (params) {
     "p"."fullName" AS "author",
 		"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
-    ARRAY_AGG("bo"."userId") as "userBookmarked",
     "a"."createdAt",
     "a"."updatedAt"
     FROM 
