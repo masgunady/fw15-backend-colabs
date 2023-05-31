@@ -1,94 +1,91 @@
 const errorHandler = require("../helpers/errorHandler.helper")
-const profileModel = require("../models/profile.model")
+// const profileModel = require("../models/profile.model")
 const bookmarksModel = require("../models/bookmarks.model")
+const articleModel = require("../models/article.model")
 
 
-exports.getThisUserBookmarks = async (req, res) => {
+exports.getBookmarksByUser = async (request, response) => {
     try {
-<<<<<<< HEAD
-        // return console.log(req.query)
-        const {id} = req.user
-        const bookmarked = await bookmarksModel.findByUser(id, req.query)
-        console.log(bookmarked)
-=======
->>>>>>> e8e6210d09fe1d1258e61bc8305569d1df509396
+        const {id} = request.user
         
-        // return console.log(req.query)
-        const { id } = req.user
-        const data = await bookmarksModel.findByUser(id,
-            req.query.page,
-            req.query.limit,
-            req.query.search,
-            req.query.sort,
-            req.query.sortBy)
+        const bookmark = await bookmarksModel.findByUserId(id)
 
-        return res.json({
-            success: true,
-            message: "All Bookmarked Article by this user",
-            results: data
-        })
-    } catch (err) {
-        return errorHandler(res, err)
-    }
-
-}
-exports.getOtherUserBookmarks = async (req, res) => {
-    try {
-        // return console.log(req.query)
-        const bookmarked = await bookmarksModel.findByUser(
-            req.query.userId,
-            req.query.page,
-            req.query.limit,
-            req.query.search,
-            req.query.sort,
-            req.query.sortBy)
-
-        if (!bookmarked) {
-            return res.json({
-                success: false,
-                message: "No Bookmarked in this Article"
-            })
+        if(!bookmark){
+            throw Error("data_not_found")
         }
 
+        return response.json({
+            success: true,
+            message: "list our bookmark",
+            results: bookmark
+        })
+
+    } catch (err) {
+        return errorHandler(response, err)
+    }
+}
+
+
+exports.checkBookmark = async(req, res) => {
+    try {
+        const {id} = req.user
+        const articleId = req.params.id
+
+        const checkBookmarks = await bookmarksModel.findOneByUserIdAndArticleId(id, articleId)
+        if(!checkBookmarks){
+            return res.json({
+                success: false,
+                message: `bookmark event ${articleId} by for user ${id} not found`,
+                results: false
+            })
+        }
         return res.json({
             success: true,
-            message: "All Bookmarked Article by other user",
-            results: bookmarked
+            message: `bookmark event ${articleId} by for user ${id} found`,
+            results: true
         })
+    
+
     } catch (err) {
         return errorHandler(res, err)
     }
-
 }
-
 
 exports.createBookmarkedArticle = async (req, res) => {
     try {
-
-        const { id } = req.user
-        const profile = await profileModel.findOneByUserId(id)
-
-        const dataBookmarks = {
-            ...req.body,
-            userId: profile.id
+        const {id} = req.user
+        const data = {
+            userId:id,
+            articleId: req.body.articleId        }
+        const articleId = data.articleId
+        const checkArticle = await articleModel.findOne(articleId)
+        if(!checkArticle){
+            console.log("test")
+            throw Error("data_not_found")
         }
-        console.log(dataBookmarks)
-        const bookmark = await bookmarksModel.insertBookmarkedArticle(dataBookmarks)
-        const results = {
-            userId: dataBookmarks.userId,
-            articleId: dataBookmarks.articleId,
-            createdAt: bookmark.createdAt
+
+
+        const checkDuplicate = await bookmarksModel.findOneByUserIdAndArticleId(id, articleId)
+        if(checkDuplicate){
+            const deleteBookmark = await bookmarksModel.deleteByUserIdAndArticleId(id, articleId)
+            return res.json({
+                success: true,
+                message: "remove bookmarks success",
+                results: deleteBookmark
+            })
+        }
+        const bookmarks = await bookmarksModel.insert(data)
+        if(!bookmarks){
+            throw Error("create_bookmarks_failed")
         }
 
         return res.json({
             success: true,
-            message: "Create bookmarks succesfully",
-            results
+            message: "add bookmarks success",
+            results: bookmarks
         })
     } catch (err) {
-        return res.status(400).json({
-            success: false,
-            message: "Create Bookmark failed"
-        })
+        return errorHandler(res, err)
     }
+
 }

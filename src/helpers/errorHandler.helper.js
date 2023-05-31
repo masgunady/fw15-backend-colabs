@@ -18,6 +18,13 @@ const errorHandler = (response, error) => {
             message: "Token is invalid"
         })
     }
+    if(error?.message?.includes("data_not_found")) {
+        console.log(error)
+        return response.status(401).json({
+            success: false, 
+            message: "article not found"
+        })
+    }
     if(error?.message?.includes("please_sign_in")) {
         console.log(error)
         return response.status(401).json({

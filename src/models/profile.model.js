@@ -45,7 +45,6 @@ exports.findOneByUserId = async function(userId){
     "p"."about",
     "p"."createdAt",
     "p"."updatedAt"
-
     FROM "${table}" "p"
     JOIN "users" "u" ON "u"."id" = "p"."userId"
     JOIN "role" "r" ON "r"."id" = "u"."roleId"

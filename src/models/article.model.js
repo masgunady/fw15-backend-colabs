@@ -86,7 +86,6 @@ exports.findOne = async function (id) {
     "p"."userId" AS "authorId",
 	"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
-    ARRAY_AGG("bo"."userId") as "userBookmarked",
     "a"."createdAt",
     "a"."updatedAt"
     FROM 
