@@ -1,117 +1,70 @@
 const db = require("../helpers/db.helper")
 
-// exports.findAllComments = async function (page, limit, search, sort, sortBy, articleId) {
-//     page = parseInt(page) || 1
-//     limit = parseInt(limit) || 5
-//     search = search || ""
-//     sort = sort || "id"
-//     sortBy = sortBy || "ASC"
-//     articleId = articleId || ""
-
-//     const offset = (page - 1) * limit
-
-//     const query = `
-//     SELECT c.*, "p"."fullName", "p"."picture"
-//     FROM "bookmarks" c
-//     JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
-//     WHERE "p"."fullName" LIKE $3 AND "c"."articleId" LIKE $4
-//     ORDER BY "${sort}" ${sortBy} LIMIT $1  OFFSET $2 
-//     `
-//     const values = [limit, offset, `%${search}%`, articleId]
-//     const { rows } = await db.query(query, values)
-//     return rows
-// }
-
-// exports.findOne = async function (userId) {
-//     const query = `
-//     SELECT c.*, "p"."username" AS "username", "p"."picture" AS "picture"
-//     FROM "bookmarks" c
-//     JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
-//     WHERE "c".id = $1
-// `
-//     const values = [userId]
-//     const { rows } = await db.query(query, values)
-//     return rows[0]
-// }
-// exports.findByArticle = async function (articleId) {
-//     const query = `
-//     SELECT 
-//     "p"."picture",
-//     "p"."fullName" as "username",
-//     "c"."content" as "comment"
-//     FROM "bookmarks" c
-//     JOIN "profiles" "p" ON "c"."userId" = "p"."userId"
-//     WHERE "c"."articleId"= $1
-// `
-//     const values = [articleId]
-//     const { rows } = await db.query(query, values)
-//     return rows
-// }
-
-<<<<<<< HEAD
-exports.findByUser = async function (userId, params) {
-    params.page = parseInt(params.page) || 1
-    params.limit = parseInt(params.limit) ||20
-    params.sort = params.sort || "DESC"
-    params.sortBy = params.sortBy || "createdAt"
-
-    const offset = (params.page - 1) * params.limit
+exports.findByUserId = async function (id) {
     const query = `
     SELECT 
-    "bo"."articleId",
-    "bo"."userId",
     "a"."picture",
+    "a"."id",
+    "b"."id" AS "bookmarkId",
     "a"."title",
     "a"."content",
+    "p"."fullName" AS "author",
+    "rl"."name" AS "role",
+    "p"."userId" AS "authorId",
+	"c"."name" AS "category",
     COUNT("li"."id")::INTEGER AS "likeCount",
-    "a"."createdAt"
-    FROM "bookmarks" "bo"
+    "a"."createdAt",
+    "a"."updatedAt"
+    FROM 
+        "bookmarks" "b"
+    LEFT JOIN "articles" "a" ON "a"."id" = "b"."articleId"
     LEFT JOIN 
-        "articles" AS "a" ON "a"."id" = "bo"."articleId"
+        "categories" AS "c" ON "c"."id" = "a"."categoryId"
     LEFT JOIN 
-        "likes" AS "li" ON "li"."articleId" = "bo"."articleId"
-    WHERE "bo"."userId"= $1 
-    GROUP BY
-        "bo"."userId",
-        "bo"."articleId",
+        "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
+    LEFT JOIN 
+        "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "bookmarks" AS "bo" ON "bo"."articleId" = "a"."id"
+    LEFT JOIN 
+        "users" AS "u" ON "u"."id" = "p"."userId"
+    LEFT JOIN 
+        "role" AS "rl" ON "rl"."id" = "u"."roleId"
+        WHERE "b"."userId" = $1
+    GROUP BY 
         "a"."picture",
+        "a"."id",
+        "b"."id",
         "a"."title",
         "a"."content",
-        "a"."createdAt"
-    ORDER BY "${params.sortBy}" ${params.sort}
-    LIMIT ${params.limit} OFFSET ${offset}
-    `
-    const values = [userId]
-=======
-exports.findByUser = async function ( userId, page, limit, search, sort, sortBy) {
-    page = parseInt(page) || 1
-    limit = parseInt(limit) || 5
-    search = search || ""
-    sort = sort || "id"
-    sortBy = sortBy || "ASC"
+        "p"."fullName",
+        "rl"."name",
+        "p"."userId",
+        "c"."name",
+        "a"."createdAt",
+        "a"."updatedAt"
 
-    const offset = (page - 1) * limit
-
-    const query = `
-    SELECT b.*, 
-    b."userId", 
-    b."articleId", 
-    substring(a.title, 1, 10) AS "title", 
-    substring(a.content, 1, 40) AS "content",
-    a.picture AS "picture",
-    "li"."id" AS "likeCount"
-    FROM "bookmarks" b 
-    INNER JOIN articles a ON a.id = b."articleId"
-    INNER JOIN likes li ON "li"."id" = "b"."articleId"
-    WHERE b."userId" = $4 AND
-    "title" LIKE $3
-    ORDER BY "${sort}" ${sortBy} 
-    LIMIT $1 OFFSET $2
   `
-    const values = [limit, offset, `%${search}%`, userId]
->>>>>>> e8e6210d09fe1d1258e61bc8305569d1df509396
+    // console.log(query)
+    const values = [id]
     const { rows } = await db.query(query, values)
     return rows
+}
+
+exports.insert = async(data)=>{
+    const queries = `
+    INSERT INTO "bookmarks" (
+      "articleId",
+      "userId"
+      )
+    VALUES ($1, $2) RETURNING *
+    `
+    const values = [
+        data.articleId,
+        data.userId
+    ]
+    const {rows} = await db.query(queries, values)
+    return rows[0]
 }
 
 exports.insertBookmarkedArticle = async function (data) {
@@ -124,11 +77,23 @@ exports.insertBookmarkedArticle = async function (data) {
     return rows[0]
 }
 
-// exports.destroy = async function (id) {
-//     const query = `
-// DELETE FROM "bookmarks" WHERE "id"=$1
-// `
-//     const values = [id]
-//     const { rows } = await db.query(query, values)
-//     return rows[0]
-// }
+
+exports.findOneByUserIdAndArticleId = async(userId, articleId) => {
+    const query = `
+    SELECT * FROM "bookmarks" WHERE "userId" = $1 AND "articleId" =  $2
+    `
+    const values = [userId, articleId]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
+
+
+exports.deleteByUserIdAndArticleId = async(userId, articleId) => {
+    const query = `
+    DELETE FROM "bookmarks" WHERE "userId" = $1 AND "articleId" =  $2 RETURNING *
+    `
+    const values = [userId, articleId]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+
+}
