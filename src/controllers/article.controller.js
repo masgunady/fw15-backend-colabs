@@ -106,16 +106,18 @@ exports.createManageArticle = async (request, response) => {
         if (!dataArticle) {
             throw Error("failed_create_article")
         }
-
+        const articleId = dataArticle.id
         const textMessage = "request to publish article"
+        const recipientRole = "superadmin"
         const dataRequest = {
-            articleId: dataArticle.id,
-            userId: id,
+            articleId: articleId,
+            senderId: id,
             message: textMessage,
             typeRequest:"article",
-            statusRequest:1
+            statusRequest:1,
+            recipientRole: recipientRole
         }
-        const createRequest = await requestArticleModel.insertRequestArticle(dataRequest)
+        await requestArticleModel.insertRequestArticle(dataRequest)
 
         const status = await articleStatusModel.findOne(dataArticle.statusId)
         const userCreated = await profileModel.findOneByUserId(id)

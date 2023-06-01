@@ -46,6 +46,13 @@ const errorHandler = (response, error) => {
             message: "Token signature is invalid"
         })
     }
+    if(error?.message?.includes("request_author_is_being_processed")) {
+        
+        return response.status(401).json({
+            success: false, 
+            message: "Your request is being processed by the system"
+        })
+    }
     if(error?.message?.includes("name_empty_field")) {
       
         return response.status(400).json({

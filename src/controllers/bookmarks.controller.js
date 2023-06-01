@@ -1,5 +1,6 @@
 const errorHandler = require("../helpers/errorHandler.helper")
-// const profileModel = require("../models/profile.model")
+
+const requestModel = require("../models/request.model")
 const bookmarksModel = require("../models/bookmarks.model")
 const articleModel = require("../models/article.model")
 
@@ -56,11 +57,11 @@ exports.createBookmarkedArticle = async (req, res) => {
         const {id} = req.user
         const data = {
             userId:id,
-            articleId: req.body.articleId        }
+            articleId: req.body.articleId}
         const articleId = data.articleId
         const checkArticle = await articleModel.findOne(articleId)
+        // return console.log(checkArticle)
         if(!checkArticle){
-            console.log("test")
             throw Error("data_not_found")
         }
 
@@ -75,9 +76,26 @@ exports.createBookmarkedArticle = async (req, res) => {
             })
         }
         const bookmarks = await bookmarksModel.insert(data)
+        
         if(!bookmarks){
             throw Error("create_bookmarks_failed")
         }
+
+        const message = " bookmarked your post"
+        const type = "bookmark_article"
+        const status =  1
+        const recipientId = checkArticle.authorId
+        const article = checkArticle.id
+
+        const recipientData = {
+            articleId: article,
+            senderId: id,
+            message: message,
+            typeRequest: type,
+            statusRequest: status,
+            recipientId: recipientId
+        }
+        await requestModel.insertNotification(recipientData)
 
         return res.json({
             success: true,

@@ -1,56 +1,131 @@
 const db = require("../helpers/db.helper")
 
-exports.insertRequestArticle = async (data) =>{
-    const query = `
-    INSERT INTO "requestArticle" ("articleId", "userId","message","typeRequest","statusRequest")
-    VALUES ($1, $2, $3, $4, $5) RETURNING *
-    `
+exports.findAll = async(params) => {
 
-    const values = [data.articleId, data.userId, data.message, data.typeRequest, data.statusRequest]
+    params.page = parseInt(params.page) || 1
+    params.limit = parseInt(params.limit) || 10
+    params.searchName = params.searchName || ""
+    params.category = params.category || ""
+    params.searchCategory = params.searchCategory || ""
+    params.searchLocation = params.searchLocation || ""
+    params.sort = params.sort || "DESC"
+    params.sortBy = params.sortBy || "id"
+    const offset = (params.page - 1) * params.limit
+    const query = `
+    SELECT
+    "n"."id",
+    "u"."id" AS "senderId",
+    "p"."picture",
+    "p"."fullName",
+    "a"."id" AS "articleId",
+    "n"."typeRequest",
+    "n"."message",
+    "n"."statusRequest",
+    "n"."createdAt",
+    "n"."updatedAt"
+    FROM "notifications" "n"
+    LEFT JOIN "users" "u" ON "u"."id" = "n"."senderId"
+    LEFT JOIN "profiles" "p" ON "p"."userId" = "u"."id"
+    LEFT JOIN "articles" "a" ON "a"."id" = "n"."articleId"
+    WHERE "n"."statusRequest" = 1 AND "senderId" != '${params.id}' AND ("recipientRole" = 'superadmin' OR "recipientId" = '${params.id}')
+    ORDER BY "${params.sortBy}" ${params.sort}
+    LIMIT ${params.limit} OFFSET ${offset}
+    `
+    const {rows} = await db.query(query)
+    return rows
+}
+
+exports.findAllNotifUser = async(params) => {
+
+    params.page = parseInt(params.page) || 1
+    params.limit = parseInt(params.limit) || 10
+    params.searchName = params.searchName || ""
+    params.category = params.category || ""
+    params.searchCategory = params.searchCategory || ""
+    params.searchLocation = params.searchLocation || ""
+    params.sort = params.sort || "DESC"
+    params.sortBy = params.sortBy || "id"
+    const offset = (params.page - 1) * params.limit
+    const query = `
+    SELECT
+    "n"."id",
+    "u"."id" AS "senderId",
+    "p"."picture",
+    "p"."fullName",
+    "a"."id" AS "articleId",
+    "n"."typeRequest",
+    "n"."message",
+    "n"."statusRequest",
+    "n"."createdAt",
+    "n"."updatedAt"
+    FROM "notifications" "n"
+    LEFT JOIN "users" "u" ON "u"."id" = "n"."senderId"
+    LEFT JOIN "profiles" "p" ON "p"."userId" = "u"."id"
+    LEFT JOIN "articles" "a" ON "a"."id" = "n"."articleId"
+    WHERE "n"."statusRequest" = 1 AND "recipientId" = '${params.id}' AND "senderId" <> '${params.id}'
+    ORDER BY "${params.sortBy}" ${params.sort}
+    LIMIT ${params.limit} OFFSET ${offset}
+    `
+    const {rows} = await db.query(query)
+    return rows
+}
+
+exports.checkDuplicate = async(params) => {
+    console.log(params)
+    
+    const query = `
+    SELECT
+    "n"."id",
+    "u"."id" AS "senderId",
+    "p"."picture",
+    "p"."fullName",
+    "a"."id" AS "articleId",
+    "n"."typeRequest",
+    "n"."message",
+    "n"."statusRequest",
+    "n"."createdAt",
+    "n"."updatedAt"
+    FROM "notifications" "n"
+    LEFT JOIN "users" "u" ON "u"."id" = "n"."senderId"
+    LEFT JOIN "profiles" "p" ON "p"."userId" = "u"."id"
+    LEFT JOIN "articles" "a" ON "a"."id" = "n"."articleId"
+    WHERE "n"."senderId" = $1 AND "n"."typeRequest" = $2 AND "n"."statusRequest" = $3
+    `
+    const values = [params.senderId, params.typeRequest, params.statusRequest]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+
+}
+
+
+exports.insertNotification = async(data) => {
+    const query = `
+    INSERT INTO "notifications" ("articleId","senderId","message","typeRequest","statusRequest","recipientId")
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+    `
+    const values = [data.articleId,data.senderId, data.message,data.typeRequest, data.statusRequest, data.recipientId]
     const {rows} = await db.query(query, values)
     return rows[0]
 }
 
-exports.findAll = async() => {
-
-    // params.page = parseInt(params.page) || 1
-    // params.limit = parseInt(params.limit) || 10
-    // const offset = (params.page - 1) * params.limit
-    // params.sort = params.sort || "ASC"
-    // params.sortBy = params.sortBy || "\ra.id""\id"
-    const query = `
-    SELECT
-    "ra"."id",
-   "u"."id" AS "userId",
-    "p"."picture",
-    "p"."fullName",
-    "a"."id" AS "articleId",
-    "ra"."typeRequest",
-    "ra"."message",
-    "ra"."statusRequest",
-    "ra"."createdAt",
-    "ra"."updatedAt"
-    FROM "requestArticle" "ra"
-    LEFT JOIN "users" "u" ON "u"."id" = "ra"."userId"
-    LEFT JOIN "profiles" "p" ON "p"."userId" = "u"."id"
-    LEFT JOIN "articles" "a" ON "a"."id" = "ra"."articleId"
-    WHERE "ra"."statusRequest" = 1
-    `
-    // ORDER BY "${params.sort}" ${params.sortBy} 
-    // LIMIT $1 OFFSET $2
-    // const values = [params.limit, offset]
-    const {rows} = await db.query(query)
-    return rows
-
-}
 
 exports.insertRequestAuthor = async(data) => {
     const query = `
-    INSERT INTO "requestArticle" ("userId","message","typeRequest","statusRequest")
-    VALUES ($1, $2, $3, $4) RETURNING *
+    INSERT INTO "notifications" ("senderId","message","typeRequest","statusRequest","recipientId", "recipientRole")
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
     `
+    const values = [data.senderId, data.message,data.typeRequest, data.statusRequest, data.recipientId, data.recipientRole]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
 
-    const values = [data.userId, data.message,data.typeRequest, data.statusRequest]
+
+exports.insertRequestArticle = async(data) => {
+    const query = `
+    INSERT INTO "notifications" ("articleId","senderId","message","typeRequest","statusRequest","recipientId", "recipientRole")
+    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *
+    `
+    const values = [data.articleId,data.senderId, data.message,data.typeRequest, data.statusRequest, data.recipientId, data.recipientRole]
     const {rows} = await db.query(query, values)
     return rows[0]
 }
@@ -59,7 +134,7 @@ exports.insertRequestAuthor = async(data) => {
 
 exports.changeStatusRequest = async(id) => {
     const query = `
-    UPDATE "requestArticle" SET "statusRequest" = 0 WHERE "id" = $1
+    UPDATE "notifications" SET "statusRequest" = 0 WHERE "id" = $1
     RETURNING *
     `
     const values = [id]
