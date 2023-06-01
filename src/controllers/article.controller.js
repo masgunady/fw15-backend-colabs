@@ -107,7 +107,7 @@ exports.createManageArticle = async (request, response) => {
             throw Error("failed_create_article")
         }
         const articleId = dataArticle.id
-        const textMessage = "request to publish article"
+        const textMessage = "sent you request to publish article"
         const recipientRole = "superadmin"
         const dataRequest = {
             articleId: articleId,

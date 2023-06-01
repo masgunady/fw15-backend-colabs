@@ -3,7 +3,7 @@ const db = require("../helpers/db.helper")
 exports.findAll = async(params) => {
 
     params.page = parseInt(params.page) || 1
-    params.limit = parseInt(params.limit) || 10
+    params.limit = parseInt(params.limit) || 100
     params.searchName = params.searchName || ""
     params.category = params.category || ""
     params.searchCategory = params.searchCategory || ""
@@ -38,7 +38,7 @@ exports.findAll = async(params) => {
 exports.findAllNotifUser = async(params) => {
 
     params.page = parseInt(params.page) || 1
-    params.limit = parseInt(params.limit) || 10
+    params.limit = parseInt(params.limit) || 100
     params.searchName = params.searchName || ""
     params.category = params.category || ""
     params.searchCategory = params.searchCategory || ""
@@ -70,9 +70,7 @@ exports.findAllNotifUser = async(params) => {
     return rows
 }
 
-exports.checkDuplicate = async(params) => {
-    console.log(params)
-    
+exports.checkDuplicate = async(params) => {   
     const query = `
     SELECT
     "n"."id",

@@ -10,6 +10,23 @@ exports.insertByUser = async function (data, userId) {
     return rows[0]
 }
 
+exports.findByUserIdAndArticleId = async(userId, articleId) => {
+    const query = `
+    SELECT * FROM "likes" WHERE "userId" = $1 AND "articleId" =  $2
+    `
+    const values = [userId, articleId]
+    const {rows} = await db.query(query, values)
+    return rows
+}
+exports.findOneByUserIdAndArticleId = async(userId, articleId) => {
+    const query = `
+    SELECT * FROM "likes" WHERE "userId" = $1 AND "articleId" =  $2
+    `
+    const values = [userId, articleId]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
+
 exports.destroyArticleByUser = async function (userId, id) {
     const query = `
     DELETE FROM "likes" 
