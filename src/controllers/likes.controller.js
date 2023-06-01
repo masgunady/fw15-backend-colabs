@@ -17,6 +17,7 @@ exports.createLikes = async (req, res) => {
         return errorHandler(res, err)
     }
 }
+
 exports.deleteLikes = async (req, res) => {
     try{
         const {id} = req.user

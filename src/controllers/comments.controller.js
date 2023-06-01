@@ -5,8 +5,6 @@ const profileModel = require("../models/profile.model")
 
 exports.getCommentByArticle = async (req, res) => {
     try {
-        // return console.log(req.query)
-        // console.log(req.query)
         const articleId =  req.params.id
         const comment = await commentsModel.findByArticle(articleId, req.query)
         if (!comment){

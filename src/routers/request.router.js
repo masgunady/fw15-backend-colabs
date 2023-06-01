@@ -2,7 +2,8 @@ const requestRouter = require("express").Router()
 
 const requestController = require ("../controllers/request.controller")
 
-requestRouter.get("/", requestController.getAllRequestArticle)
+requestRouter.get("/", requestController.getAllRequestForAdmin)
+requestRouter.get("/user", requestController.getAllRequestForUser)
 requestRouter.post("/", requestController.insertRequestAuthor)
 requestRouter.post("/acc-author", requestController.accRequestAuthor)
 requestRouter.post("/acc-article", requestController.accRequestArticle)
