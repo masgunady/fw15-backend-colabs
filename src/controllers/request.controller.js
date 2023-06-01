@@ -43,7 +43,7 @@ exports.getAllRequestForUser = async(req, res) => {
 exports.insertRequestAuthor = async(req,res) => {
     try {
         const {id} = req.user
-        const message = "request to be an author"
+        const message = "sent you request to be an author"
         const type = "author"
         const status = 1
         const recipientRole = "superadmin"
@@ -81,7 +81,7 @@ exports.accRequestArticle = async(req, res) => {
         // return console.log(accRequestArticle)
         await requestModel.changeStatusRequest(requestId)
 
-        const message = " - your article has been published"
+        const message = "your article has been published"
         const type = "acc_article"
         const status =  1
         const recipientId = accRequestArticle.createdBy
@@ -117,7 +117,7 @@ exports.rejectRequestArticle = async(req, res) => {
         const rejectRequestArticle = await articleModel.rejectRequestArticle(articleId)
         await requestModel.changeStatusRequest(requestId)
 
-        const message = " - your article has been rejected"
+        const message = "your article has been rejected"
         const type = "reject_article"
         const status =  1
         const recipientId = rejectRequestArticle.createdBy

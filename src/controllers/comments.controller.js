@@ -1,6 +1,8 @@
 const errorHandler = require("../helpers/errorHandler.helper")
 const commentsModel = require("../models/comments.model")
 const profileModel = require("../models/profile.model")
+const articleModel = require("../models/article.model")
+const requestModel = require("../models/request.model")
 
 
 exports.getCommentByArticle = async (req, res) => {
@@ -27,13 +29,28 @@ exports.createComments = async (req, res) => {
 
         const {id} = req.user
         const profile = await profileModel.findOneByUserId(id)
-        
+        const article = await articleModel.findOne(req.body.articleId)
         const dataComment = {
             ...req.body,
             userId: id
         }
-        console.log(dataComment)
+        const message = "sent you a comment"
+        const type = "comment_article"
+        const status =  1
+        const recipientId = article.authorId
+        const articleId = article.id
+
+        const recipientData = {
+            articleId: articleId,
+            senderId: id,
+            message: message,
+            typeRequest: type,
+            statusRequest: status,
+            recipientId: recipientId
+        }
+        
         const comment = await commentsModel.insert(dataComment)
+        await requestModel.insertNotification(recipientData)
         const results = {
             userPicture: profile.picture,
             username: profile.fullName,

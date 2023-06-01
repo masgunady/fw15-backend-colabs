@@ -1,10 +1,5 @@
 const errorHandler = (response, error) => {
-    // if(error?.message === "validation"){
-    //     return response.status(400).json({
-    //         success: false,
-    //         message: "Error: email already used"
-    //     })
-    // }
+
     if (error?.message?.includes("duplicate key")) {
         return response.status(409).json({
             success: false,
@@ -32,6 +27,13 @@ const errorHandler = (response, error) => {
             message: "Please login to create article or request to be an author!"
         })
     }
+    if(error?.message?.includes("maximum_like")) {
+        console.log(error)
+        return response.status(400).json({
+            success: false, 
+            message: "Thank's, your number of likes has reached the maximum limit!"
+        })
+    }
     if(error?.message?.includes("category_not_found")) {
         console.log(error)
         return response.status(401).json({
@@ -50,14 +52,7 @@ const errorHandler = (response, error) => {
         
         return response.status(401).json({
             success: false, 
-            message: "Your request is being processed by the system"
-        })
-    }
-    if(error?.message?.includes("name_empty_field")) {
-      
-        return response.status(400).json({
-            success: false, 
-            message: "Name cannot be empty"
+            message: "Your request is being processed by the system!"
         })
     }
     if(error?.message?.includes("update_user_failed")) { //cara kang irul di validator untuk controller update
