@@ -5,22 +5,6 @@ const fileRemover = require("../helpers/fileRemover.helper")
 
 exports.getAllCategories = async (req, res) => {
     try {
-        const sortWhaitlist = ["name"]
-        if (req.query.sort && !sortWhaitlist.includes(req.query.sort)) {
-            return res.status(400).json({
-                success: false,
-                message: `Please choose one of the following sorting options: ${sortWhaitlist.join(",")}`
-            })
-        }
-
-        const sortByWhaitlist = ["asc", "desc"]
-        if (req.query.sortBy && !sortByWhaitlist.includes(req.query.sortBy.toLowerCase())) {
-            return res.status(400).json({
-                success: false,
-                message: `Please choose one of the following sorting options:  ${sortByWhaitlist.join(",")}`
-            })
-        }
-
         const data = await caterogyModels.findAllCategories(req.query.page,
             req.query.limit,
             req.query.search,

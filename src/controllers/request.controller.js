@@ -78,7 +78,6 @@ exports.accRequestArticle = async(req, res) => {
         }
         const {articleId, requestId} = req.body
         const accRequestArticle = await articleModel.accRequestArticle(articleId)
-        // return console.log(accRequestArticle)
         await requestModel.changeStatusRequest(requestId)
 
         const message = "your article has been published"
