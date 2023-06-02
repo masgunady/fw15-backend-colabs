@@ -68,7 +68,15 @@ exports.createBookmarkedArticle = async (req, res) => {
 
         const checkDuplicate = await bookmarksModel.findOneByUserIdAndArticleId(id, articleId)
         if(checkDuplicate){
+            const data = {
+                senderId: checkDuplicate.userId,
+                articleId: checkDuplicate.articleId,
+                typeRequest: "bookmark_article"
+            }
+            await requestModel.deleteRequestBookmark(data)
             const deleteBookmark = await bookmarksModel.deleteByUserIdAndArticleId(id, articleId)
+
+
             return res.json({
                 success: true,
                 message: "remove bookmarks success",
