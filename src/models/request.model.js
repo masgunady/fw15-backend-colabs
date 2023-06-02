@@ -139,3 +139,12 @@ exports.changeStatusRequest = async(id) => {
     const {rows} = await db.query(query, values)
     return rows[0]
 }
+exports.deleteRequestBookmark = async(data) => {
+    const query = `
+    DELETE FROM "notifications" WHERE "senderId" = $1 AND "articleId" = $2 AND "typeRequest" = $3
+    RETURNING *
+    `
+    const values = [data.senderId, data.articleId, data.typeRequest]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+}
