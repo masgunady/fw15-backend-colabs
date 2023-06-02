@@ -13,6 +13,7 @@ articleRouter.patch("/manage/:id", uploadMiddleware("picture"), articleControlle
 
 
 articleRouter.get("/", articleController.getAllArticle)
+articleRouter.get("/waiting-list", articleController.getAllArticlePending)
 articleRouter.get("/by-user/:id", articleController.getAllArticleByUser)
 articleRouter.get("/:id", articleController.getArticle)
 
