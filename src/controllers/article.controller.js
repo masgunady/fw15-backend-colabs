@@ -21,6 +21,22 @@ exports.getAllArticle = async (request, response) => {
         return erorrHandler(response, err)
     }
 }
+
+exports.getAllArticlePending = async (request, response) => {
+    try {
+        const {rows: results, pageInfo} = await articleModel.findAllWait(request.query)
+        // return console.log(request.query)
+        return response.json({
+            success: true,
+            message: "List of all waiting list article",
+            pageInfo,
+            results
+        })
+    } catch (err) {
+        return erorrHandler(response, err)
+    }
+}
+
 exports.getAllArticleByUser = async (request, response) => {
     try {
         const id = request.params.id

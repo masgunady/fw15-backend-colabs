@@ -73,6 +73,78 @@ exports.findAll = async function (params) {
     }}
 }
 
+exports.findAllWait = async function (params) {
+    params.page = parseInt(params.page) || 1
+    params.limit = parseInt(params.limit) || 5
+    params.searchName = params.searchName || ""
+    params.category = params.category || ""
+    params.searchCategory = params.searchCategory || ""
+    params.searchLocation = params.searchLocation || ""
+    params.sort = params.sort || "ASC"
+    params.sortBy = params.sortBy || "id"
+
+    const offset = (params.page - 1) * params.limit
+    
+    const countQuery = `
+    SELECT COUNT(*)::INTEGER
+    FROM "${table}"
+    WHERE "title" LIKE $1 
+    `
+    const countValues = [`%${params.searchName}%` ]
+    // console.log(countValues)
+    const {rows: countRows} = await db.query(countQuery, countValues)
+
+    const query = `
+
+    SELECT 
+    "a"."picture",
+    "a"."id",
+		LEFT("a"."title", 40) AS "title",
+    LEFT("a"."content", 100) AS "content",
+    "p"."fullName" AS "author",
+		"c"."name" AS "category",
+    COUNT("li"."id")::INTEGER AS "likeCount",
+    "a"."createdAt",
+    "a"."updatedAt"
+    FROM 
+        "articles" "a"
+    LEFT JOIN 
+        "categories" AS "c" ON "c"."id" = "a"."categoryId"
+    LEFT JOIN 
+        "profiles" AS "p" ON "p"."userId" = "a"."createdBy"
+    LEFT JOIN 
+        "likes" AS "li" ON "li"."articleId" = "a"."id"
+    LEFT JOIN 
+        "bookmarks" AS "bo" ON "bo"."articleId" = "a"."id"
+    WHERE 
+        "a"."title" LIKE $1
+    AND "c"."name" LIKE $2
+    AND "a"."statusId" = 1
+
+    GROUP BY 
+        "a"."picture",
+        "a"."id",
+        "title",
+        "content",
+        "p"."fullName",
+        "c"."name",
+        "a"."createdAt",
+        "a"."updatedAt"
+   
+    ORDER BY "${params.sortBy}" ${params.sort}
+    LIMIT ${params.limit} OFFSET ${offset}
+    `
+    // console.log(query)
+    const values = [`%${params.searchName}%`, `%${params.category}%` ]
+    const { rows } = await db.query(query, values)
+    return {rows, pageInfo: {
+        totaData: countRows[0].count,
+        page: params.page,
+        limit: params.limit,
+        totalPage: Math.ceil(countRows[0].count / params.limit)
+    }}
+}
+
 exports.findOne = async function (id) {
     const query = `
     SELECT 
