@@ -349,11 +349,12 @@ exports.updateManageArticle = async function (id, data) {
   UPDATE "${table}" SET
   "picture" = COALESCE(NULLIF($2, ''), "picture"),
   "title" = COALESCE(NULLIF($3, ''), "title"),    
-  "content" = COALESCE(NULLIF($4::DATE, NULL), "date")
+  "content" = COALESCE(NULLIF($4,''), "content"),
+  "categoryId" = COALESCE(NULLIF($5::INTEGER, NULL), "categoryId")
     WHERE "id" = $1 
   RETURNING *
   `
-    const values = [id, data.picture, data.content]
+    const values = [id, data.picture,data.title, data.content, data.categoryId]
     const { rows } = await db.query(query, values)
     return rows[0]
 }

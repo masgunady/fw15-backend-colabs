@@ -170,7 +170,9 @@ exports.updateManageArticle = async (request, response) => {
         }
 
         if (request.file) {
-            data.picture = request.file.filename
+            // data.picture = request.file.filename
+            data.picture = request.file.path
+
         }
         const article = await articleModel.updateManageArticle(request.params.id, data)
         if (article) {
@@ -182,7 +184,8 @@ exports.updateManageArticle = async (request, response) => {
         }
         throw Error("update_Article_failed")
     } catch (err) {
-        fileremover(request.file)
+        // fileremover(request.file)
+        // return erorrHandler(response, err)
         return erorrHandler(response, err)
     }
 }
