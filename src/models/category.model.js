@@ -11,7 +11,12 @@ exports.findAllCategories = async function(page, limit, search, sort, sortBy){
     const offset = (page - 1) * limit
 
     const query = `
-  SELECT * FROM "categories" WHERE "name" LIKE $3 ORDER BY "${sortBy}" ${sort} LIMIT $1  OFFSET $2 
+    SELECT "categories"."id", "categories"."name","categories"."picture","categories"."createdAt","categories"."updatedAt", COUNT("articles"."id") AS "total_articles"
+    FROM "categories"
+    LEFT JOIN "articles" ON "categories"."id" = "articles"."categoryId"
+    WHERE "name" LIKE $3 
+    GROUP BY "categories"."id", "categories"."name","categories"."picture","categories"."createdAt","categories"."updatedAt"
+    ORDER BY "${sortBy}" ${sort} LIMIT $1  OFFSET $2 
     `
     const values = [limit, offset,`%${search}%`]
     const {rows} = await db.query(query, values)
