@@ -3,7 +3,7 @@ const categoryModel = require("../models/category.model")
 const articleStatusModel = require("../models/statusArticle.model")
 const profileModel = require("../models/profile.model")
 const requestArticleModel = require("../models/request.model")
-const fileremover = require("../helpers/fileRemover.helper")
+// const fileremover = require("../helpers/fileRemover.helper")
 const erorrHandler = require("../helpers/errorHandler.helper")
 
 
@@ -204,5 +204,21 @@ exports.deleteManageArticle = async (request, response) => {
         })
     } catch (err) {
         return erorrHandler(response, err)
+    }
+}
+
+exports.createCountVisitor = async (req, res) => {
+    try {
+        const createCount = await articleModel.insertCountVisitor(req.body)
+        return res.json({
+            success: true,
+            message: "Create comments succesfully",
+            results: createCount
+        })
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "FAIL"
+        })
     }
 }

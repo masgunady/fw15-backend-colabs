@@ -9,6 +9,8 @@ requestRouter.post("/acc-author", requestController.accRequestAuthor)
 requestRouter.post("/acc-article", requestController.accRequestArticle)
 requestRouter.post("/reject-article", requestController.rejectRequestArticle)
 requestRouter.post("/reject-author", requestController.rejectRequestAuthor)
-// requestRouter.delete("/:id", requestController.deleteLikes)
+
+requestRouter.post("/acc-all-article", requestController.accAllRequestArticle)
+requestRouter.post("/reject-all-article", requestController.rejectAllRequestArticle)
 
 module.exports = requestRouter

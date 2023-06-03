@@ -16,6 +16,7 @@ articleRouter.get("/", articleController.getAllArticle)
 articleRouter.get("/waiting-list", articleController.getAllArticlePending)
 articleRouter.get("/by-user/:id", articleController.getAllArticleByUser)
 articleRouter.get("/:id", articleController.getArticle)
+articleRouter.post("/count-data-visitor", articleController.createCountVisitor)
 
 articleRouter.delete("/manage/:id", authMiddleware.apply, articleController.deleteManageArticle)
 

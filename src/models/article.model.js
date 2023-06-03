@@ -345,6 +345,9 @@ exports.createManageArticle = async function (data) {
     return rows[0]
 }
 
+
+
+
 exports.updateManageArticle = async function (id, data) {
     const query = `
   UPDATE "${table}" SET
@@ -387,6 +390,7 @@ exports.accRequestArticle = async(id) => {
     const {rows} = await db.query(query, values)
     return rows[0]
 }
+
 exports.rejectRequestArticle = async(id) => {
     const query = `
     UPDATE "${table}" SET "statusId" = 3 WHERE "id" = $1
@@ -396,3 +400,32 @@ exports.rejectRequestArticle = async(id) => {
     const {rows} = await db.query(query, values)
     return rows[0]
 }
+
+exports.accAllArticle = async() => {
+    const query = `
+    UPDATE "${table}" SET "statusId" = 2 WHERE "statusId" = 1
+    RETURNING *
+    `
+    const {rows} = await db.query(query)
+    return rows[0]
+}
+exports.rejectAllArticle = async() => {
+    const query = `
+    UPDATE "${table}" SET "statusId" = 3 WHERE "statusId" = 1
+    RETURNING *
+    `
+    const {rows} = await db.query(query)
+    return rows[0]
+}
+
+exports.insertCountVisitor = async function (data) {
+    const query = `
+    INSERT INTO "countVisitor"
+    ("articleId", "createdBy","ipAddress")
+    VALUES ($1, $2, $3) RETURNING *
+    `
+    const values = [data.articleId, data.createdBy,data.ipAddress]
+    const { rows } = await db.query(query, values)
+    return rows[0]
+}
+
