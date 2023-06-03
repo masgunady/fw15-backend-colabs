@@ -8,7 +8,6 @@ exports.updateProfile = async(req, res) => {
     try {
         const {id} = req.user
         const user = await profileModel.findOneByUserId(id)
-        console.log(user)
         const data = {
             ...req.body
         }

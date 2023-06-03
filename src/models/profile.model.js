@@ -32,6 +32,42 @@ exports.findOne = async function(id){
 }
 
 exports.findOneByUserId = async function(userId){
+
+    const countVisitor = `
+        SELECT COUNT("cv"."id") AS "visitorCountTotal"
+        FROM "users" "u"
+        LEFT JOIN "articles" "a" ON "u"."id" = "a"."createdBy"
+        LEFT JOIN "countVisitor" "cv" ON "a"."id" = "cv"."articleId"::INTEGER
+        WHERE "u"."id" = $1
+    `
+    const countVisitorValues = [userId]
+    const {rows: countVisitorRows} = await db.query(countVisitor, countVisitorValues)
+
+    const countComments = `
+        SELECT
+        COUNT("c"."id") AS "commentCountTotal"
+        FROM "users" "u"
+        LEFT JOIN "articles" "a" ON "u"."id" = "a"."createdBy"
+        LEFT JOIN "comments" "c" ON "a"."id" = "c"."articleId"
+        WHERE "u"."id" = $1
+    `
+    const countCommentsValues = [userId]
+    const {rows: countCommentRows} = await db.query(countComments, countCommentsValues)
+
+
+    const countPost = `
+    SELECT
+    COUNT("a"."id") AS "articleCountTotal"
+    FROM "users" "u"
+    LEFT JOIN "articles" "a" ON "u"."id" = "a"."createdBy"
+    WHERE "u"."id" = $1
+`
+    const countPostValues = [userId]
+    const {rows: countPostRows} = await db.query(countPost, countPostValues)
+
+
+
+
     const query = `
     SELECT
     "u"."id",
@@ -54,7 +90,11 @@ exports.findOneByUserId = async function(userId){
 
     const values = [userId]
     const {rows} = await db.query(query, values)
-    return rows[0]
+    const profile =  rows[0]
+    const totalLike = countPostRows[0]
+    const totalVisitor = countVisitorRows[0]
+    const totalComment = countCommentRows[0]
+    return {...profile, ...totalVisitor, ...totalComment, ...totalLike}
 }
 
 exports.findOneByEmail = async function(email){
