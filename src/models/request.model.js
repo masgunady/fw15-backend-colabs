@@ -94,11 +94,7 @@ exports.checkDuplicate = async(params) => {
     return rows[0]
 
 }
-exports.findOneByArticleData = async(params) => { 
-    console.log("ini model"+params.articleId)  
-    console.log("ini model"+params.senderId)  
-    console.log("ini model"+params.typeRequest)  
-    console.log("ini model"+params.statusRequest)  
+exports.findOneByArticleData = async(params) => {
     const query = `
     SELECT * FROM "notifications"
     WHERE "articleId" = $1 AND "senderId" = $2 AND "typeRequest" = $3 AND "statusRequest" = $4
@@ -143,16 +139,25 @@ exports.insertRequestArticle = async(data) => {
 }
 
 
-
 exports.changeStatusRequest = async(id) => {
     const query = `
-    UPDATE "notifications" SET "statusRequest" = 0 WHERE "id" = $1
+    DELETE FROM "notifications" WHERE "id" = $1
     RETURNING *
     `
     const values = [id]
     const {rows} = await db.query(query, values)
     return rows[0]
 }
+
+exports.deleteRequestArticle = async() => {
+    const query = `
+    DELETE FROM "notifications" WHERE "typeRequest" = 'article' AND "statusRequest" = 1
+    RETURNING *
+    `
+    const {rows} = await db.query(query)
+    return rows[0]
+}
+
 exports.deleteRequestBookmark = async(data) => {
     const query = `
     DELETE FROM "notifications" WHERE "senderId" = $1 AND "articleId" = $2 AND "typeRequest" = $3
@@ -162,3 +167,13 @@ exports.deleteRequestBookmark = async(data) => {
     const {rows} = await db.query(query, values)
     return rows[0]
 }
+
+// exports.changeStatusRequest = async(id) => {
+//     const query = `
+//     UPDATE "notifications" SET "statusRequest" = 0 WHERE "id" = $1
+//     RETURNING *
+//     `
+//     const values = [id]
+//     const {rows} = await db.query(query, values)
+//     return rows[0]
+// }

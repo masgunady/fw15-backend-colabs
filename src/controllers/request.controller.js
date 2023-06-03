@@ -70,6 +70,41 @@ exports.insertRequestAuthor = async(req,res) => {
     }
 }
 
+exports.accAllRequestArticle = async(req, res) => {
+    try {
+        const {role} = req.user
+        if(role !== "superadmin"){
+            throw Error("please_sign_in")
+        }
+        await articleModel.accAllArticle()
+        await requestModel.deleteRequestArticle()
+        return res.json({
+            success: true,
+            message: "All request has been accepted!",
+            results: "OK"
+        })
+    } catch (error) {
+        return errorHandler(res, error)
+    }
+}
+exports.rejectAllRequestArticle = async(req, res) => {
+    try {
+        const {role} = req.user
+        if(role !== "superadmin"){
+            throw Error("please_sign_in")
+        }
+        await articleModel.rejectAllArticle()
+        await requestModel.deleteRequestArticle()
+        return res.json({
+            success: true,
+            message: "All request has been rejected!",
+            results: "OK"
+        })
+    } catch (error) {
+        return errorHandler(res, error)
+    }
+}
+
 exports.accRequestArticle = async(req, res) => {
     try {
         const {id, role} = req.user
