@@ -9,6 +9,7 @@ const erorrHandler = require("../helpers/errorHandler.helper")
 
 exports.getAllArticle = async (request, response) => {
     try {
+        console.log(request.query)
         const {rows: results, pageInfo} = await articleModel.findAll(request.query)
         // return console.log(request.query)
         return response.json({
