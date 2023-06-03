@@ -76,10 +76,19 @@ exports.accRequestArticle = async(req, res) => {
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
-        const {articleId, requestId} = req.body
+        const {articleId} = req.body
         const accRequestArticle = await articleModel.accRequestArticle(articleId)
-        await requestModel.changeStatusRequest(requestId)
-
+        const dataFindRequest = {
+            articleId: accRequestArticle.id,
+            senderId: accRequestArticle.createdBy,
+            typeRequest: "article",
+            statusRequest: 1
+        }
+        const resultRequestRow = await requestModel.findOneByArticleData(dataFindRequest)
+        if(resultRequestRow){
+            await requestModel.changeStatusRequest(resultRequestRow.id)
+        }
+  
         const message = "your article has been published"
         const type = "acc_article"
         const status =  1
@@ -112,9 +121,18 @@ exports.rejectRequestArticle = async(req, res) => {
         if(role !== "superadmin"){
             throw Error("please_sign_in")
         }
-        const {articleId, requestId} = req.body
+        const {articleId} = req.body
         const rejectRequestArticle = await articleModel.rejectRequestArticle(articleId)
-        await requestModel.changeStatusRequest(requestId)
+        const dataFindRequest = {
+            articleId: rejectRequestArticle.id,
+            senderId: rejectRequestArticle.createdBy,
+            typeRequest: "article",
+            statusRequest: 1
+        }
+        const resultRequestRow = await requestModel.findOneByArticleData(dataFindRequest)
+        if(resultRequestRow){
+            await requestModel.changeStatusRequest(resultRequestRow.id)
+        }
 
         const message = "your article has been rejected"
         const type = "reject_article"
@@ -149,14 +167,11 @@ exports.accRequestAuthor = async(req, res) => {
             throw Error("please_sign_in")
         }
         const {senderId, requestId} = req.body
-
         const accRequestAuthor = await userModel.accRequestAuthor(senderId)
         await requestModel.changeStatusRequest(requestId)
-
         const message = "accept you to be the author"
         const type = "acc_author"
         const status =  1
-
         const recipientData = {
             senderId: id,
             message: message,

@@ -94,6 +94,20 @@ exports.checkDuplicate = async(params) => {
     return rows[0]
 
 }
+exports.findOneByArticleData = async(params) => { 
+    console.log("ini model"+params.articleId)  
+    console.log("ini model"+params.senderId)  
+    console.log("ini model"+params.typeRequest)  
+    console.log("ini model"+params.statusRequest)  
+    const query = `
+    SELECT * FROM "notifications"
+    WHERE "articleId" = $1 AND "senderId" = $2 AND "typeRequest" = $3 AND "statusRequest" = $4
+    `
+    const values = [params.articleId ,params.senderId, params.typeRequest, params.statusRequest]
+    const {rows} = await db.query(query, values)
+    return rows[0]
+
+}
 
 
 exports.insertNotification = async(data) => {

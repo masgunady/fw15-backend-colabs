@@ -150,6 +150,7 @@ exports.findOne = async function (id) {
     SELECT 
     "a"."picture",
     "a"."id",
+    "a"."categoryId",
     "a"."title",
     "a"."content",
     "p"."fullName" AS "author",
