@@ -66,7 +66,7 @@ exports.createComments = async (req, res) => {
     } catch (err) {
         return res.status(400).json({
             success: false,
-            message: "Can't write this comment, Same comment with before"
+            message: "Can't write this comment, Same comment with before!"
         })
     }
 }
