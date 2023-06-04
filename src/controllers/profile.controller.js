@@ -13,7 +13,7 @@ exports.updateProfile = async(req, res) => {
         }
         if(req.file){
             if(user.picture){
-                console.log(user.picture)
+                // console.log(user.picture)
                 fileRemover({filename: user.picture})
             }
             // data.picture = req.file.filename

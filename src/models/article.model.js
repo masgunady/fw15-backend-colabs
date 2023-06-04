@@ -195,7 +195,6 @@ exports.findOne = async function (id) {
 }
 
 exports.findOneByUser = async function (id, params) {
-    console.log(params)
     params.page = parseInt(params.page) || 1
     params.limit = parseInt(params.limit) || 5
     params.sort = params.sort || "ASC"
