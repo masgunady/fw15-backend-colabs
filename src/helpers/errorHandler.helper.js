@@ -27,6 +27,13 @@ const errorHandler = (response, error) => {
             message: "Please login to create article or request to be an author!"
         })
     }
+    if(error?.message?.includes("only_admin_can_edit")) {
+        console.log(error)
+        return response.status(401).json({
+            success: false, 
+            message: "only admin can edit article!"
+        })
+    }
     if(error?.message?.includes("maximum_like")) {
         console.log(error)
         return response.status(400).json({

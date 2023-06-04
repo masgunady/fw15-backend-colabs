@@ -9,7 +9,7 @@ const articleController = require("../controllers/article.controller")
 articleRouter.get("/manage", authMiddleware, articleController.getManageAllArticle)
 articleRouter.get("/manage/:id", authMiddleware, articleController.getManageDetailArticle)
 articleRouter.post("/manage", authMiddleware, uploadMiddleware("picture"), articleController.createManageArticle)
-articleRouter.patch("/manage/:id", uploadMiddleware("picture"), articleController.updateManageArticle)
+articleRouter.patch("/manage/:id",authMiddleware, uploadMiddleware("picture"), articleController.updateManageArticle)
 
 
 articleRouter.get("/", articleController.getAllArticle)
